@@ -81,12 +81,10 @@ Bicing::Bicing() :
     if(tabbedPaneAsQObject){
         m_tabbedPane = qobject_cast<bb::cascades::TabbedPane*>(tabbedPaneAsQObject);
     }
-
-    QObject* inspectorAsObject = root->findChild<QObject*>(QString("inspectorObj"));
-    if(inspectorAsObject){
-        m_inspector = qobject_cast<bb::cascades::Container*>(inspectorAsObject);
+    QObject* placeInspectorAsObject = root->findChild<QObject*>(QString("placeInspectorObj"));
+        if(placeInspectorAsObject){
+        m_placeInspector = qobject_cast<bb::cascades::Sheet*>(placeInspectorAsObject);
     }
-
 
 
     QObject* mapViewAsQObject = root->findChild<QObject*>(QString("mapViewObj"));
@@ -98,25 +96,28 @@ Bicing::Bicing() :
                  m_nearbyStationsDialog = qobject_cast<bb::cascades::Dialog*>(nearbyStationsDialogAsQObject);
              }
              // creating a data provider just for the device location object. that way, when the clear function is call, this object is not removed.
-             DataProvider* deviceLocDataProv = new DataProvider("device-location-data-provider");
+
              DataProvider* stationsLocDataProv = new DataProvider("stations-data-provider");
-             m_mapView->mapData()->addProvider(deviceLocDataProv);
+
              m_mapView->mapData()->addProvider(stationsLocDataProv);
              // create a geolocation just for the device's location
+             DataProvider* deviceLocDataProv = new DataProvider("device-location-data-provider");
+             m_mapView->mapData()->addProvider(deviceLocDataProv);
              m_deviceLocation = new GeoLocation("device-location-id");
+             m_deviceLocation = new GeoLocation(41.363093,2.139771);
              m_deviceLocation->setName("Current Device Location");
              Marker bullseye = Marker("asset:///images/me.png", QSize(60, 60),
                                  QPoint(29, 29), QPoint(29, 1));
-             //qDebug()<< bullseye.absoluteIconPath();
+             qDebug()<< bullseye.absoluteIconPath();
              m_deviceLocation->setMarker(bullseye);
 
-
+             qDebug() << "xd";
              deviceLocDataProv->add(m_deviceLocation);
              QObject* bubbleObject = m_mapView->findChild<QObject*>(QString("bubbleObj"));
              if (bubbleObject) {
                  m_bubble = qobject_cast<bb::cascades::Container*>(bubbleObject);
              }
-             getMapImage(m_deviceLocation->latitude(),m_deviceLocation->longitude());
+             //getMapImage(m_deviceLocation->latitude(),m_deviceLocation->longitude());
              updateMap();
 
          }
@@ -145,7 +146,7 @@ void Bicing::locationTapped(QString id){
 
         for (QList<QVariant>::iterator childIt = l.begin(); childIt != l.end(); childIt++){
             if (childIt->toMap()["id"]==id) {
-                m_currentStation=childIt->toMap();
+                setCurrentStation(childIt->toMap());
             }
         }
         m_bubble->setProperty("device",false);
@@ -154,6 +155,8 @@ void Bicing::locationTapped(QString id){
         m_bubble->setProperty("status",m_currentStation["extra"].toMap()["status"].toString()=="OPN");
         m_bubble->setProperty("free_bikes",m_currentStation["free_bikes"].toInt());
         m_bubble->setProperty("empty_slots",m_currentStation["empty_slots"].toInt());
+        m_bubble->setProperty("latitude",m_currentStation["latitude"].toString());
+        m_bubble->setProperty("longitude",m_currentStation["longitude"].toString());
     }
 }
 void Bicing::updateMap(){
@@ -300,12 +303,17 @@ void Bicing::routeToCurrentStation(){
 }
 void Bicing::inspectCurrentStation(){
     getMapImage(m_currentStation["latitude"].toDouble(),m_currentStation["longitude"].toDouble());
-}
-void Bicing::shareCurrentStation(){
-    ;
-}
-void Bicing::openNearbyStations(){
-    ;
+    m_currentNearbyStationsDataModel->clear();
+    m_currentNearbyStationsDataModel->insertList(m_currentNearbyStations);
+    m_placeInspector->setProperty("device",false);
+    qDebug() << "helo";
+    m_placeInspector->setProperty("timestamp",getLocalTimeFromStation(m_currentStation));
+    m_placeInspector->setProperty("name",m_currentStation["name"].toString());
+    m_placeInspector->setProperty("status",m_currentStation["extra"].toMap()["status"].toString()=="OPN");
+    m_placeInspector->setProperty("free_bikes",m_currentStation["free_bikes"].toInt());
+    m_placeInspector->setProperty("empty_slots",m_currentStation["empty_slots"].toInt());
+    m_placeInspector->setProperty("lat",m_currentStation["latitude"].toString());
+    m_placeInspector->setProperty("lon",m_currentStation["longitude"].toString());
 }
 void Bicing::filterCurrentStationsDataModel(QString filter){
     filter = filter.trimmed();
@@ -376,7 +384,6 @@ void Bicing::setCurrentNetwork(QVariantMap cn){
     stationsLocDataProv->setVisible(false);
     stationsLocDataProv->clear();
     QVariantList l = m_currentNetwork["stations"].toList();
-    QVariantList l2;
 
     for (QList<QVariant>::iterator childIt = l.begin(); childIt != l.end(); childIt++)
     {
@@ -384,7 +391,7 @@ void Bicing::setCurrentNetwork(QVariantMap cn){
 
         childMap.insert("timestamp",QVariant(getLocalTimeFromStation(childMap)));
 
-        l2.prepend(childMap);
+        m_currentNetworkStations.prepend(childMap);
 
         GeoLocation* newDrop = new GeoLocation(childMap["id"].toString(),childMap["name"].toString(), Point(childMap["latitude"].toDouble(),childMap["longitude"].toDouble()));
         QString desc = QString("Free: "+childMap["free_bikes"].toString()+" - Empty: "+childMap["empty_slots"].toString());
@@ -411,21 +418,25 @@ void Bicing::setCurrentNetwork(QVariantMap cn){
 
     }
     m_currentStationsDataModel->clear();
-    m_currentStationsDataModel->insertList(l2);
+    m_currentStationsDataModel->insertList(m_currentNetworkStations);
     stationsLocDataProv->setVisible(true);
     emit currentNetworkChanged(cn);
 
 }
 void Bicing::setCurrentStation(QVariantMap cs){
     m_currentStation = cs;
-    QVariantList l = m_currentNetwork["stations"].toList();
+    qDebug() << m_currentNetworkStations[0].toMap()["name"].toString();
+    qDebug() << m_currentNetwork["stations"].toList()[0].toMap()["name"].toString();
+    QVariantList l = m_currentNetworkStations;
     QVariantList l2 = m_currentStation["extra"].toMap()["NearbyStationList"].toList();
     m_currentNearbyStations.clear();
     for (QList<QVariant>::iterator childIt2 = l2.begin(); childIt2 != l2.end(); childIt2++)
     {
         for (QList<QVariant>::iterator childIt3 = l.begin(); childIt3 != l.end(); childIt3++){
             if(childIt3->toMap()["extra"].toMap()["uid"].toInt()==childIt2->toInt()){
-                m_currentNearbyStations.prepend(QVariant(childIt3->toMap()));
+                QVariantMap childMap = childIt3->toMap();
+                childMap.insert("timestamp",QVariant(getLocalTimeFromStation(childMap)));
+                m_currentNearbyStations.prepend(QVariant(childMap));
             }
         }
 
@@ -444,7 +455,10 @@ void Bicing::setCurrentNearbyStationsDataModel(GroupDataModel* model){
     m_currentNearbyStationsDataModel= model;
     emit currentNearbyStationsDataModelChanged(model);
 }
-
+void Bicing::setCurrentNetworkStations(QVariantList cns){
+    m_currentNetworkStations = cns;
+    emit currentNetworkStationsChanged(cns);
+}
 // RETURN QPROPERTIES
 
 QVariantMap Bicing::currentNetwork(){
@@ -458,6 +472,9 @@ QVariantMap Bicing::currentStation(){
 }
 QVariantList Bicing::currentNearbyStations(){
     return m_currentNearbyStations;
+}
+QVariantList Bicing::currentNetworkStations(){
+    return m_currentNetworkStations;
 }
 bb::cascades::Image Bicing::staticMapImage(){
     return m_staticMapImage;

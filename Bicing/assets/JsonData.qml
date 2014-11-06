@@ -35,20 +35,22 @@ Page {
             dataModel: _bicing.currentStationsDataModel
             listItemComponents: ListItemComponent {
                 type: "item"
-                StationListItem {
-                    id: li
-                    name: ListItemData.name
-                    free_bikes: ListItemData.free_bikes
-                    empty_slots: ListItemData.empty_slots
-                    timestamp: ListItemData.timestamp
-                    status: ListItemData.extra.status.toString()=="OPN" 
-                }
-            }
+                    StationListItem {
+                        name: ListItemData.name
+                        free_bikes: ListItemData.free_bikes
+                        empty_slots: ListItemData.empty_slots
+                        timestamp: ListItemData.timestamp
+                        status: ListItemData.extra.status.toString()=="OPN"
+                    
+                    } 
+             }
             onTriggered: {
                 var selectedItem = dataModel.data(indexPath);
                 _bicing.locationTapped(selectedItem["id"]);
                 _bicing.inspectCurrentStation()
+                openPlaceInspector()
             }
+
         
         }
     }

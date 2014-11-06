@@ -22,7 +22,7 @@
 #include <bb/cascades/GroupDataModel>
 #include <bb/cascades/Image>
 #include <bb/cascades/Dialog>
-
+#include <bb/cascades/Sheet>
 namespace bb
 {
     namespace cascades
@@ -33,6 +33,7 @@ namespace bb
         class TabbedPane;
         class Dialog;
         class GroupDataModel;
+        class Sheet;
         namespace maps {
             class MapView;
             class MapImageGenerator;
@@ -58,6 +59,7 @@ class Bicing : public QObject
     Q_PROPERTY(QVariantMap currentNetwork READ currentNetwork WRITE setCurrentNetwork NOTIFY currentNetworkChanged)
     Q_PROPERTY(QVariantMap currentStation READ currentStation WRITE setCurrentStation NOTIFY currentStationChanged)
     Q_PROPERTY(QVariantList currentNearbyStations READ currentNearbyStations WRITE setCurrentNearbyStations NOTIFY currentNearbyStationsChanged)
+    Q_PROPERTY(QVariantList currentNetworkStations READ currentNetworkStations WRITE setCurrentNetworkStations NOTIFY currentNetworkStationsChanged)
     Q_PROPERTY(QVariantMap nets READ nets WRITE setNets NOTIFY netsChanged)
     Q_PROPERTY(bb::cascades::Image staticMapImage READ staticMapImage WRITE setStaticMapImage NOTIFY staticMapImageChanged)
     Q_PROPERTY(bb::cascades::GroupDataModel* currentStationsDataModel READ currentStationsDataModel WRITE setCurrentStationsDataModel NOTIFY currentStationsDataModelChanged)
@@ -72,8 +74,6 @@ public:
     Q_INVOKABLE void goToMyLocation();
     Q_INVOKABLE void routeToCurrentStation();
     Q_INVOKABLE void inspectCurrentStation();
-    Q_INVOKABLE void shareCurrentStation();
-    Q_INVOKABLE void openNearbyStations();
     Q_INVOKABLE void filterCurrentStationsDataModel(QString filter);
     Q_INVOKABLE void filterCurrentNearbyStationsDataModel(QString filter);
     Q_INVOKABLE bb::cascades::GroupDataModel* getNearbyStationsDataModel(QString id);
@@ -85,6 +85,7 @@ public:
     QVariantMap currentStation();
     QVariantMap nets();
     QVariantList currentNearbyStations();
+    QVariantList currentNetworkStations();
     bb::cascades::Image staticMapImage();
     bb::cascades::GroupDataModel* currentStationsDataModel();
     bb::cascades::GroupDataModel* currentNearbyStationsDataModel();
@@ -97,6 +98,7 @@ public:
     void setCurrentNetwork(QVariantMap cn);
     void setCurrentStation(QVariantMap cs);
     void setCurrentNearbyStations(QVariantList cns);
+    void setCurrentNetworkStations(QVariantList cns);
     void setNets(QVariantMap n);
     void setStaticMapImage(bb::cascades::Image i);
     void setCurrentStationsDataModel(bb::cascades::GroupDataModel* model);
@@ -108,6 +110,7 @@ Q_SIGNALS:
     void currentNetworkChanged(QVariantMap cn);
     void currentStationChanged(QVariantMap cs);
     void currentNearbyStationsChanged(QVariantList cns);
+    void currentNetworkStationsChanged(QVariantList cns);
     void netsChanged(QVariantMap n);
     void staticMapImageChanged(bb::cascades::Image i);
     void replyCompleted(QString reply);
@@ -126,16 +129,17 @@ private:
     bb::cascades::maps::MapView *m_mapView;
     bb::platform::geo::GeoLocation *m_deviceLocation;
     bb::cascades::Container *m_bubble;
-    bb::cascades::Container *m_inspector;
     bb::cascades::Image m_staticMapImage;
     bb::cascades::TabbedPane *m_tabbedPane;
     bb::cascades::Dialog* m_nearbyStationsDialog;
     bb::cascades::GroupDataModel* m_currentStationsDataModel;
     bb::cascades::GroupDataModel* m_currentNearbyStationsDataModel;
+    bb::cascades::Sheet* m_placeInspector;
     QVariantMap m_currentNetwork;
     QVariantMap m_networks;
     QVariantMap m_currentStation;
     QVariantList m_currentNearbyStations;
+    QVariantList m_currentNetworkStations;
 
     void getRequest(QString url);
     void getMapImage(double lat,double lon);

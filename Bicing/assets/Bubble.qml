@@ -21,6 +21,8 @@ Container {
     property string name
     property string timestamp
     property string bubbleColor
+    property string latitude
+    property string longitude
     property bool status
     property bool device
     property bool isFavorite
@@ -145,13 +147,6 @@ Container {
                     orientation: LayoutOrientation.LeftToRight
                 }
                 ImageButton {
-                    defaultImageSource: "asset:///images/nearby.png"
-                    horizontalAlignment: HorizontalAlignment.Right
-                    onClicked: {
-                        _bicing.openNearbyStations()
-                    }
-                }
-                ImageButton {
                     defaultImageSource: "asset:///images/ic_nav_to.png"
                     horizontalAlignment: HorizontalAlignment.Right
                     onClicked:{
@@ -163,13 +158,15 @@ Container {
                     horizontalAlignment: HorizontalAlignment.Right 
                     onClicked: {
                         _bicing.inspectCurrentStation()
+                        openPlaceInspector()
                     }
                 }
                 ImageButton {
                     defaultImageSource: "asset:///images/ic_share_black.png"
                     horizontalAlignment: HorizontalAlignment.Right
                     onClicked: {
-                        _bicing.shareCurrentStation()
+                        share(name,status,free_bikes.toString(),empty_slots.toString(),timestamp.toString())
+                        
                     }
                 }
             }

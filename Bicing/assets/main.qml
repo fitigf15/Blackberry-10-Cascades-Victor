@@ -20,6 +20,8 @@ import bb.cascades.maps 1.2
 import QtMobilitySubset.location 1.1
 
 TabbedPane {
+    paneProperties: NavigationPaneProperties {
+    }
     objectName: "tabbedPaneObj"
     id: root
     showTabsOnActionBar: true
@@ -39,18 +41,39 @@ TabbedPane {
             id: stationsPage            
         }
     } //End of second tab
-    Tab {
-        
-        title: qsTr("Inspector") + Retranslate.onLocaleOrLanguageChanged
+    attachedObjects: [PlaceInspector {
         id: placeInspector
-        Page {
-            
-            id: placeInspectorPage
-            PlaceInspector {
-                
+    },Invocation {
+        id: shareInvoke
+        query{
+            mimeType: "text/plain"
+            invokeActionId: "bb.action.SHARE"
+            invokerIncluded: true
+            onDataChanged: {
+                shareInvoke.query.updateQuery()
             }
         }
+    }]
+    function openPlaceInspector(){
+        placeInspector.open()
     }
+    function share(name,status,free_bikes,empty_slots,timestamp){
+        
+        var data = "The station "+name+" is "
+        if(status){
+            data+="open, it has "+free_bikes+" free bikes and "+empty_slots+" empty slots. "
+        }else{
+            data+="closed. "
+        }
+        data+="The information was updated via BicingApp at "+timestamp+"."
+        shareInvoke.query.data=data
+        shareInvoke.query.dataChanged(data)
+        shareInvoke.trigger("bb.action.SHARE")
+    }
+    function locate(){
+        activeTab=map
+    }
+    
     function loadJSON(path, success, error)
     {
         var xhr = new XMLHttpRequest();
@@ -88,5 +111,6 @@ TabbedPane {
                 _bicing.nets=data.networks;
         }, function(data){console.log(data)});
     }
+    
 }
 

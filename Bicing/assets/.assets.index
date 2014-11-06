@@ -1,5 +1,5 @@
 1
-27
+30
 Bubble.qml
 DialogContent.qml
 images/black_pin.png
@@ -23,7 +23,10 @@ images/red_pin.png
 images/url.png
 images/yellow_pin.png
 JsonData.qml
+ListPage.qml
 main.qml
 Map.qml
+MapPage.qml
 PlaceInspector.qml
 StationListItem.qml
+StreetView.qml

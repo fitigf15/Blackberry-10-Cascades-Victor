@@ -4,12 +4,12 @@
 <context>
     <name>Bicing</name>
     <message>
-        <location filename="../src/bicing.cpp" line="209"/>
+        <location filename="../src/bicing.cpp" line="212"/>
         <source>Error: %1 status: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/bicing.cpp" line="215"/>
+        <location filename="../src/bicing.cpp" line="218"/>
         <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -73,18 +73,13 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="30"/>
+        <location filename="../assets/main.qml" line="32"/>
         <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="37"/>
+        <location filename="../assets/main.qml" line="39"/>
         <source>Stations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../assets/main.qml" line="44"/>
-        <source>Inspector</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

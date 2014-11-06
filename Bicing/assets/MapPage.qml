@@ -1,6 +1,6 @@
 import bb.cascades 1.2
 import bb.data 1.0
-import bb.cascades.maps 1.0
+import bb.cascades.maps 1.2
 
 Page {
     property alias dataSource
