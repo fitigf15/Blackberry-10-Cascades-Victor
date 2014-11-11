@@ -4,12 +4,25 @@
 <context>
     <name>Bicing</name>
     <message>
-        <location filename="../src/bicing.cpp" line="212"/>
+        <location filename="../src/bicing.cpp" line="210"/>
         <source>Error: %1 status: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/bicing.cpp" line="218"/>
+        <location filename="../src/bicing.cpp" line="216"/>
+        <source>Unable to retrieve request headers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CityBikes</name>
+    <message>
+        <location filename="../src/CityBikes.cpp" line="192"/>
+        <source>Error: %1 status: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/CityBikes.cpp" line="197"/>
         <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24,6 +37,19 @@
     <message>
         <location filename="../assets/JsonData.qml" line="17"/>
         <source>Go to me</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>JsonDataModel</name>
+    <message>
+        <location filename="../src/JsonDataModel.cpp" line="56"/>
+        <source>Error: %1 status: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/JsonDataModel.cpp" line="61"/>
+        <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

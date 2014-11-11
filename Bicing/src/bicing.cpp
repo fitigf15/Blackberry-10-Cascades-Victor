@@ -104,14 +104,12 @@ Bicing::Bicing() :
              DataProvider* deviceLocDataProv = new DataProvider("device-location-data-provider");
              m_mapView->mapData()->addProvider(deviceLocDataProv);
              m_deviceLocation = new GeoLocation("device-location-id");
-             m_deviceLocation = new GeoLocation(41.363093,2.139771);
              m_deviceLocation->setName("Current Device Location");
              Marker bullseye = Marker("asset:///images/me.png", QSize(60, 60),
                                  QPoint(29, 29), QPoint(29, 1));
              qDebug()<< bullseye.absoluteIconPath();
              m_deviceLocation->setMarker(bullseye);
 
-             qDebug() << "xd";
              deviceLocDataProv->add(m_deviceLocation);
              QObject* bubbleObject = m_mapView->findChild<QObject*>(QString("bubbleObj"));
              if (bubbleObject) {

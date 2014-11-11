@@ -15,6 +15,7 @@
  */
 
 #include "bicing.hpp"
+#include "CityBikes.hpp"
 
 #include <bb/cascades/Application>
 
@@ -31,7 +32,8 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 
     // Create the Application UI object, this is where the main.qml file
     // is loaded and the application scene is set.
-    Bicing b;
+    //Bicing b;
+    CityBikes c;
 
     // Enter the application main event loop.
     return Application::exec();

@@ -89,17 +89,24 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/red_pin.png) \
         $$quote($$BASEDIR/assets/images/url.png) \
         $$quote($$BASEDIR/assets/images/yellow_pin.png) \
-        $$quote($$BASEDIR/assets/main.qml)
+        $$quote($$BASEDIR/assets/main.qml) \
+        $$quote($$BASEDIR/assets/settings.json)
 }
 
 config_pri_source_group1 {
     SOURCES += \
-        $$quote($$BASEDIR/src/applicationui.cpp) \
+        $$quote($$BASEDIR/src/CityBikes.cpp) \
+        $$quote($$BASEDIR/src/JsonDataModel.cpp) \
+        $$quote($$BASEDIR/src/JsonItem.cpp) \
+        $$quote($$BASEDIR/src/JsonItemProvider.cpp) \
         $$quote($$BASEDIR/src/bicing.cpp) \
         $$quote($$BASEDIR/src/main.cpp)
 
     HEADERS += \
-        $$quote($$BASEDIR/src/applicationui.hpp) \
+        $$quote($$BASEDIR/src/CityBikes.hpp) \
+        $$quote($$BASEDIR/src/JsonDataModel.hpp) \
+        $$quote($$BASEDIR/src/JsonItem.hpp) \
+        $$quote($$BASEDIR/src/JsonItemProvider.hpp) \
         $$quote($$BASEDIR/src/bicing.hpp)
 }
 
