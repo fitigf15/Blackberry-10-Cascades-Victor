@@ -10,6 +10,7 @@
 #include <bb/cascades/QmlDocument>
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/LocaleHandler>
+#include <bb/cascades/GroupDataModel>
 #include <bb/cascades/maps/MapView>
 #include <bb/cascades/maps/MapData>
 #include <bb/cascades/maps/DataProvider>
@@ -34,6 +35,9 @@ CityBikes::CityBikes():
     // compiler warning
     Q_UNUSED(res);
     // initial load
+    m_jsonDataModel = new GroupDataModel(this);
+    m_jsonDataModel->setGrouping(bb::cascades::ItemGrouping::None);
+
     onSystemLanguageChanged();
 
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
@@ -148,21 +152,50 @@ void CityBikes::onImageFinished(MapImageGenerator * reply){
 }
 
 void CityBikes::inspectStation(QString id){
-
+    m_jsonDataModel->clear();
+    QVariantMapList newList;
     if(id!="device-location-id"){
-        QVariantMap map;
-        for (int i=0; i<m_jsonDataModel->size();i++){
-            QVariant v = m_jsonDataModel->value(i);
-            if (v.toMap()["id"].toString()==id) {
-                map = v.toMap();
+        QVariantMap stationMap;
+        foreach(QVariantMap m, m_originalList){
+            if(m["id"].toString()==id) {
+                stationMap = m;
                 break;
             }
         }
-        if(!map.isEmpty()){
 
+        qDebug() << stationMap;
+        if(!stationMap.isEmpty()){
+            getMapImage(stationMap["latitude"].toDouble(),stationMap["longitude"].toDouble());
+            QVariantList nearbyStationList=stationMap["extra"].toMap()["NearbyStationList"].toList();
+            QVariantList stationsList;
+            foreach(QVariantMap m, m_originalList){
+                foreach(QVariant uid, nearbyStationList){
+                    QString s = m["name"].toString();
+                    s.truncate(3);
+                    if(s.trimmed().toInt()==uid.toInt()){
+                        newList.prepend(m);
+                        break;
+                    }
+                }
+            }
+
+            m_jsonDataModel->insertList(newList);
         }
     }
 
+}
+
+QVariantMap CityBikes::getStationProperties(QString id){
+    foreach(QVariantMap m, m_originalList){
+        if (m["id"].toString()==id) {
+            return m;
+        }
+    }
+    return QVariantMap();
+}
+
+void CityBikes::routeTo(double lat, double lon){
+    qDebug() << lat << lon;
 }
 
 
@@ -224,24 +257,28 @@ void CityBikes::onReplyFinished(){
 
 void CityBikes::parseJsonData(QVariant jsonData){
     m_jsonDataModel->clear();
+    m_originalList.clear();
     QVariantList l = jsonData.toMap()["network"].toMap()["stations"].toList();
     findSettings();
     foreach(QVariant v, l){
         QVariantMap m  =v.toMap();
-        m.insert("localtime",getLocalTimeFromStation(m["timestamp"].toString()));
-        m.insert("isFavorite",QVariant(false));
+        m.insert("localTimestamp",getLocalTimeFromStation(m["timestamp"].toString()));
+        m.insert("isFavorite",false);
         foreach(QVariant s, m_settings["favorites"].toList()){
             if(m["id"].toString()==s.toMap()["id"].toString()){
                 m.insert("isFavorite",QVariant(true));
                 break;
             }
         }
-        m_jsonDataModel->append(m);
+        m_originalList.prepend(m);
         addGeoLocation(m);
-
-
     }
+    m_jsonDataModel->insertList(m_originalList);
+}
+
+void CityBikes::resetList(){
     m_jsonDataModel->clear();
+    m_jsonDataModel->insertList(m_originalList);
 }
 
 void CityBikes::findSettings(){
@@ -273,47 +310,72 @@ QString CityBikes::getLocalTimeFromStation(QString time,QString mode){
 }
 
 void CityBikes::applyFilter(QString filter){
-    filter = filter.trimmed();
-
-    QVariantMapList l;
-    for(int i=0; i<m_jsonDataModel->size();i++){
-        QVariant v = m_jsonDataModel->value(i);
-        l.append(v.toMap());
-    }
     m_jsonDataModel->clear();
+    filter = filter.trimmed();
+    QVariantMapList newList;
+    qDebug() << "FILTER" << filter;
     if(filter.isEmpty()){
-        m_jsonDataModel->append(l);
-    }else if(filter.contains(",",Qt::CaseInsensitive)){
-
+        newList = m_originalList;
     }else{
-        foreach (QVariantMap m, l)
-        {
-            if(m["name"].toString().contains(filter,Qt::CaseInsensitive)){
-                m_jsonDataModel->append(m);
+        if(filter.contains(",",Qt::CaseInsensitive)){
+            QStringList filters = filter.split(",");
+            foreach(QString f, filters){
+                bool ok;
+                if(f.toInt(&ok, 10)>0){
+                    if(ok){
+                        if(f.size()==1){
+                            f.prepend("0");
+                        }
+                    }
+                }
+            }
+            foreach(QVariantMap m, m_originalList){
+                QString s = m["name"].toString();
+                s.truncate(3);
+                foreach(QString f, filters){
+                    if(s.trimmed()==f){
+                        newList.prepend(m);
+                        break;
+                    }
+                }
+            }
+        }else{
+            foreach(QVariantMap m, m_originalList){
+                if(m["name"].toString().contains(filter,Qt::CaseInsensitive)){
+                    newList.prepend(m);
+                }
             }
         }
+
+
     }
+
+    m_jsonDataModel->insertList(newList);
+
 }
 
 void CityBikes::updateItemIsFavoriteAtIndex(QVariantList indexPath, const bool isFavorite)
 {
     QVariantMap modelItem = m_jsonDataModel->data(indexPath).toMap();
+    m_jsonDataModel->clear();
+    int itemDataIndex = m_originalList.indexOf(modelItem);
     // Update the item in the list of data.
     modelItem["isFavorite"]= isFavorite;
+    m_originalList.replace(itemDataIndex,modelItem);
     QVariantMap m;
     m.insert("id",modelItem["id"].toString());
-    QVariantList l = m_settings["favorites"].toList();
-    if(l.contains(m)){
-        if(!isFavorite) l.removeAt(m_settings["favorites"].toList().indexOf(m));
+    QVariantList favorites = m_settings["favorites"].toList();
+    if(favorites.contains(m)){
+        if(!isFavorite) favorites.removeAt(m_settings["favorites"].toList().indexOf(m));
     }else{
-        if(isFavorite)l.append(m);
+        if(isFavorite)favorites.prepend(m);
     }
-    m_settings.insert("favorites",l);
+    m_settings.insert("favorites",favorites);
 
     foreach(QVariant v, m_settings["favorites"].toList()){
         qDebug() << v;
     }
-    m_jsonDataModel->replace(indexPath[0].toInt(),modelItem);
+    m_jsonDataModel->insertList(m_originalList);
 
     // Since the item status was changed, it is removed from the model and
     // consequently it is removed from the current list shown by the app.
@@ -338,7 +400,7 @@ void CityBikes::setIsFavorite(const QVariantList selectionList, const bool isFav
 
 void CityBikes::deleteItemAtIndex(QVariantList indexPath)
 {
-    m_jsonDataModel->removeAt(indexPath[0].toInt());
+    m_jsonDataModel->removeAt(indexPath);
 }
 
 void CityBikes::deleteJsonItems(const QVariantList selectionList)
@@ -375,7 +437,7 @@ void CityBikes::setStaticMapImage(bb::cascades::Image img){
     m_staticMapImage = img;
     emit staticMapImageChanged(img);
 }
-JsonListDataModel* CityBikes::dataModel(){
+bb::cascades::GroupDataModel* CityBikes::dataModel(){
     return m_jsonDataModel;
 }
 

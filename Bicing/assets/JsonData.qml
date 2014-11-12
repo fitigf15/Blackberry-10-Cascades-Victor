@@ -35,7 +35,7 @@ Page {
         }
         ListView {
             id: listView
-            dataModel: _bicing.currentStationsDataModel
+            dataModel: _cityBikes.dataModel
             listItemComponents: ListItemComponent {
                 type: "item"
                     StationListItem {
@@ -50,8 +50,7 @@ Page {
             onTriggered: {
                 var selectedItem = dataModel.data(indexPath);
                 //_bicing.locationTapped(selectedItem["id"]);
-                _cityBikes.currentLocationID=selectedItem["id"]
-                _bicing.inspectCurrentStation()
+                _cityBikes.inspectStation(selectedItem["id"])
                 openPlaceInspector()
             }
 

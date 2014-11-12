@@ -14,21 +14,32 @@
  */
 import bb.cascades 1.2
 
-
 Container {
+    property variant propertiesMap
     property int free_bikes
     property int empty_slots
     property string name
     property string timestamp
+    property string stationID
     property string bubbleColor
     property string latitude
     property string longitude
     property bool status
-    property bool device
     property bool isFavorite
     overlapTouchPolicy: OverlapTouchPolicy.Allow
+    function setProperties(fb,es,n,ts,sid,lat,lon,st,isf){
+        free_bikes=fb
+        empty_slots=es
+        name=n
+        timestamp=ts
+        stationID=sid
+        latitude=lat
+        longitude=lon
+        status=st=="OPN"
+        isFavorite=isf
+    }
     Container {
-        visible: device
+        visible: stationID=="device-location-id"
         Label {
             text: "You"
             visible: !status
@@ -40,7 +51,7 @@ Container {
         }
     }
     Container {
-        visible: !device
+        visible: stationID!="device-location-id"
         leftPadding: 10
         rightPadding: 10
         bottomPadding: 10
@@ -154,14 +165,17 @@ Container {
                     defaultImageSource: "asset:///images/ic_nav_to.png"
                     horizontalAlignment: HorizontalAlignment.Right
                     onClicked:{
-                        _bicing.routeToCurrentStation()
+                        //_bicing.routeToCurrentStation()
+                        _cityBikes.routeTo(latitude,longitude)
                     }
                 }
                 ImageButton {
                     defaultImageSource: "asset:///images/ic_info_black.png"
                     horizontalAlignment: HorizontalAlignment.Right 
                     onClicked: {
-                        _bicing.inspectCurrentStation()
+                        //_bicing.inspectCurrentStation()
+                        
+                        _cityBikes.inspectStation(stationID)
                         openPlaceInspector()
                     }
                 }

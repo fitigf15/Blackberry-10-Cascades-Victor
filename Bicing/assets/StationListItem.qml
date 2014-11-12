@@ -17,6 +17,12 @@ CustomListItem {
              else isFavorite=true
              console.log(isFavorite)
          }
+     },
+     ActionItem {
+         title: "log visibility"
+         onTriggered: {
+             console.log(ListItemData.visible)
+         }
      }]
  }
  highlightAppearance: HighlightAppearance.Full

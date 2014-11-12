@@ -1,5 +1,5 @@
 1
-30
+31
 Bubble.qml
 DialogContent.qml
 images/black_pin.png
@@ -28,5 +28,6 @@ main.qml
 Map.qml
 MapPage.qml
 PlaceInspector.qml
+settings.json
 StationListItem.qml
 StreetView.qml

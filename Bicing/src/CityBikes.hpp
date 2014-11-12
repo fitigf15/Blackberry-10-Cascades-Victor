@@ -9,6 +9,7 @@
 #define _CITYBIKES_HPP_
 #include <bb/cascades/QListDataModel>
 #include <bb/cascades/Image>
+#include <bb/cascades/GroupDataModel>
 #include <bb/cascades/maps/MapImageGenerator>
 #include <bb/system/InvokeManager>
 #include <QtNetwork/QNetworkReply>
@@ -22,6 +23,7 @@ namespace bb
     {
         class Image;
         class LocaleHandler;
+        class GroupDataModel;
         namespace maps {
             class MapView;
             class MapImageGenerator;
@@ -40,7 +42,7 @@ class CityBikes: public QObject
 
     Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
     Q_PROPERTY(bb::cascades::Image staticMapImage READ staticMapImage WRITE setStaticMapImage NOTIFY staticMapImageChanged)
-    Q_PROPERTY(JsonListDataModel* dataModel READ dataModel)
+    Q_PROPERTY(bb::cascades::GroupDataModel* dataModel READ dataModel)
 public:
 
     CityBikes();
@@ -50,7 +52,7 @@ public:
     void setUrl(QString url);
     bb::cascades::Image staticMapImage();
     void setStaticMapImage(bb::cascades::Image i);
-    JsonListDataModel* dataModel();
+    bb::cascades::GroupDataModel* dataModel();
 
 
 
@@ -61,6 +63,10 @@ public:
     Q_INVOKABLE void applyFilter(QString filter);
     Q_INVOKABLE void goToDeviceLocation();
     Q_INVOKABLE void inspectStation(QString id);
+    Q_INVOKABLE void routeTo(double lat, double lon);
+    Q_INVOKABLE void resetList();
+    Q_INVOKABLE QVariantMap getStationProperties(QString id);
+
 
 Q_SIGNALS:
     void urlChanged(QString url);
@@ -82,7 +88,7 @@ private:
     bb::cascades::LocaleHandler *m_pLocaleHandler;
     bb::cascades::maps::MapView *m_mapView;
     bb::platform::geo::GeoLocation *m_deviceLocation;
-    JsonListDataModel* m_jsonDataModel;
+    bb::cascades::GroupDataModel* m_jsonDataModel;
     bb::cascades::Image m_staticMapImage;
 
 
@@ -100,6 +106,7 @@ private:
 
     QString m_url;
     QVariantMap m_settings;
+    QVariantMapList m_originalList;
 
 
 

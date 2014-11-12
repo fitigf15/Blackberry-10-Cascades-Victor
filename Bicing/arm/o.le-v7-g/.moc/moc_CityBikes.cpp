@@ -22,8 +22,8 @@ static const uint qt_meta_data_CityBikes[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
-       3,   64, // properties
+      13,   14, // methods
+       3,   79, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
@@ -44,11 +44,14 @@ static const uint qt_meta_data_CityBikes[] = {
      261,  254,   10,   10, 0x02,
      282,   10,   10,   10, 0x02,
      306,  303,   10,   10, 0x02,
+     330,  210,   10,   10, 0x02,
+     353,   10,   10,   10, 0x02,
+     377,  303,  365,   10, 0x02,
 
  // properties: name, type, flags
-      11,  330, 0x0a495103,
-     358,  338, 0x0049510b,
-     392,  373, 0x00095009,
+      11,  407, 0x0a495103,
+     435,  415, 0x0049510b,
+     480,  450, 0x00095009,
 
  // properties: notify_signal_id
        0,
@@ -68,8 +71,10 @@ static const char qt_meta_stringdata_CityBikes[] = {
     "updateDeviceLocation(double,double)\0"
     "filter\0applyFilter(QString)\0"
     "goToDeviceLocation()\0id\0inspectStation(QString)\0"
+    "routeTo(double,double)\0resetList()\0"
+    "QVariantMap\0getStationProperties(QString)\0"
     "QString\0bb::cascades::Image\0staticMapImage\0"
-    "JsonListDataModel*\0dataModel\0"
+    "bb::cascades::GroupDataModel*\0dataModel\0"
 };
 
 void CityBikes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -88,6 +93,10 @@ void CityBikes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 7: _t->applyFilter((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 8: _t->goToDeviceLocation(); break;
         case 9: _t->inspectStation((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 10: _t->routeTo((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 11: _t->resetList(); break;
+        case 12: { QVariantMap _r = _t->getStationProperties((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QVariantMap*>(_a[0]) = _r; }  break;
         default: ;
         }
     }
@@ -125,9 +134,9 @@ int CityBikes::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 13;
     }
 #ifndef QT_NO_PROPERTIES
       else if (_c == QMetaObject::ReadProperty) {
@@ -135,7 +144,7 @@ int CityBikes::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: *reinterpret_cast< QString*>(_v) = url(); break;
         case 1: *reinterpret_cast< bb::cascades::Image*>(_v) = staticMapImage(); break;
-        case 2: *reinterpret_cast< JsonListDataModel**>(_v) = dataModel(); break;
+        case 2: *reinterpret_cast< bb::cascades::GroupDataModel**>(_v) = dataModel(); break;
         }
         _id -= 3;
     } else if (_c == QMetaObject::WriteProperty) {

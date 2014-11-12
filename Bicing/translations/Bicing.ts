@@ -17,12 +17,12 @@
 <context>
     <name>CityBikes</name>
     <message>
-        <location filename="../src/CityBikes.cpp" line="207"/>
+        <location filename="../src/CityBikes.cpp" line="246"/>
         <source>Error: %1 status: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CityBikes.cpp" line="212"/>
+        <location filename="../src/CityBikes.cpp" line="251"/>
         <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,37 +61,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="19"/>
+        <location filename="../assets/Map.qml" line="20"/>
         <source>Go to me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="34"/>
+        <location filename="../assets/Map.qml" line="36"/>
         <source>map long pressed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="38"/>
+        <location filename="../assets/Map.qml" line="40"/>
         <source>followed id changed to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="41"/>
+        <location filename="../assets/Map.qml" line="43"/>
         <source>focused id changed to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="45"/>
+        <location filename="../assets/Map.qml" line="47"/>
         <source>button clicked %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="49"/>
+        <location filename="../assets/Map.qml" line="51"/>
         <source>label clicked %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="57"/>
+        <location filename="../assets/Map.qml" line="62"/>
         <source>location long pressed %1</source>
         <translation type="unfinished"></translation>
     </message>

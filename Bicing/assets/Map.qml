@@ -11,7 +11,8 @@ Page {
             imageSource: "asset:///images/pin.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
-                _bicing.updateMap()
+                //_bicing.updateMap()
+                _cityBikes.url="http://api.citybik.es/v2/networks/bicing"
             }
         }
         ,
@@ -20,7 +21,8 @@ Page {
             imageSource: "asset:///images/me.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
-                _bicing.goToMyLocation()
+                //_bicing.goToMyLocation()
+                _cityBikes.goToDeviceLocation()
             }
         }
     ]
@@ -45,11 +47,14 @@ Page {
             console.log(qsTr("button clicked %1").arg(focusedId));
         }
         onCaptionLabelTapped: {
-            //TAP A PIN LABEL
+            //TAP A PIN LABELF
             console.log(qsTr("label clicked %1").arg(focusedId));
         }
         onLocationTapped: {
-            _bicing.locationTapped(id);
+            //_bicing.locationTapped(id);
+            var station = _cityBikes.getStationProperties(id)
+            bubble.propertiesMap = station
+            bubble.setProperties(station["free_bikes"],station["empty_slots"],station["name"],station["localTimestamp"],station["id"],station["latitude"],station["longitude"],station.extra.status,station["isFavorite"])
             //console.log(qsTr("location pressed %1").arg(id));
         }
         onLocationLongPressed: {
@@ -68,7 +73,8 @@ Page {
             active: true
             updateInterval: 5000
             onPositionChanged: {
-            _bicing.updateDeviceLocation(positionSource.position.coordinate.latitude, positionSource.position.coordinate.longitude)
+                //_bicing.updateDeviceLocation(positionSource.position.coordinate.latitude, positionSource.position.coordinate.longitude)
+                _cityBikes.updateDeviceLocation(positionSource.position.coordinate.latitude, positionSource.position.coordinate.longitude)
             }
         },
         Dialog {

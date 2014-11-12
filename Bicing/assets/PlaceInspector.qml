@@ -20,6 +20,7 @@ Sheet {
                 title: "close"
                 onTriggered: {
                     placeInspector.close()
+                    _cityBikes.resetList()
                 }
             }
         
@@ -53,7 +54,7 @@ Sheet {
                 Container {
                     id: information
                     ImageView {
-                        image: _bicing.staticMapImage
+                        image: _cityBikes.staticMapImage
                         scalingMethod: ScalingMethod.Fill
                     }
                     Divider {
@@ -89,7 +90,8 @@ Sheet {
                             id: textFilter
                             hintText: "Filter stations"
                             onTextChanging: {
-                                _bicing.filterCurrentNearbyStationsDataModel(text);
+                                //_bicing.filterCurrentNearbyStationsDataModel(text);
+                                _cityBikes.applyFilter(text)
                             }
                         }
                         Button {
@@ -119,7 +121,8 @@ Sheet {
                     }
                     ListView {
                         id: listView
-                        dataModel: _bicing.currentNearbyStationsDataModel
+                        //dataModel: _bicing.currentNearbyStationsDataModel
+                        dataModel: _cityBikes.dataModel
                         listItemComponents: ListItemComponent {
                             type: "item"
                             StationListItem {
@@ -133,14 +136,15 @@ Sheet {
                         }
                         onTriggered: {
                             var selectedItem = dataModel.data(indexPath);
-                            _bicing.locationTapped(selectedItem["id"]);
-                            _bicing.inspectCurrentStation()
+                            //_bicing.locationTapped(selectedItem["id"]);
+                            //_bicing.inspectCurrentStation()
+                            _cityBikes.inspectStation(selectedItem["id"])
                             free_bikes=selectedItem["free_bikes"]
                             empty_slots=selectedItem["empty_slots"]
                             lat=selectedItem["latitude"]
                             lon=selectedItem["longitude"]
                             name=selectedItem["name"]
-                            timestampselectedItem["timestamp"]
+                            timestamp=selectedItem["timestamp"]
                         }
                     
                     }
