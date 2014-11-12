@@ -39,9 +39,8 @@ class CityBikes: public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
-    Q_PROPERTY(QString currentLocationID READ currentLocationID WRITE setCurrentLocationID NOTIFY currentLocationIDChanged)
     Q_PROPERTY(bb::cascades::Image staticMapImage READ staticMapImage WRITE setStaticMapImage NOTIFY staticMapImageChanged)
-
+    Q_PROPERTY(JsonListDataModel* dataModel READ dataModel)
 public:
 
     CityBikes();
@@ -49,10 +48,9 @@ public:
 
     QString url();
     void setUrl(QString url);
-    QString currentLocationID();
-    void setCurrentLocationID(QString currentLocationID);
     bb::cascades::Image staticMapImage();
     void setStaticMapImage(bb::cascades::Image i);
+    JsonListDataModel* dataModel();
 
 
 
@@ -61,10 +59,11 @@ public:
     void deleteJsonItems(const QVariantList selectionList);
     Q_INVOKABLE void updateDeviceLocation(double lat, double lon);
     Q_INVOKABLE void applyFilter(QString filter);
+    Q_INVOKABLE void goToDeviceLocation();
+    Q_INVOKABLE void inspectStation(QString id);
 
 Q_SIGNALS:
     void urlChanged(QString url);
-    void currentLocationIDChanged(QString currentLocationID);
     void staticMapImageChanged(bb::cascades::Image i);
     void replyCompleted(QString reply);
 
@@ -101,7 +100,6 @@ private:
 
     QString m_url;
     QVariantMap m_settings;
-    QString m_currentLocationID;
 
 
 

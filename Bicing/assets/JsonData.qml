@@ -9,7 +9,8 @@ Page {
             imageSource: "asset:///images/pin.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
-                _bicing.updateMap()
+                //_bicing.updateMap()
+                _cityBikes.url="http://api.citybik.es/v2/networks/bicing"
             }
         }
         ,
@@ -18,7 +19,8 @@ Page {
             imageSource: "asset:///images/me.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
-                _bicing.goToMyLocation()
+                //_bicing.goToMyLocation()
+                _cityBikes.goToDeviceLocation()
             }
         }
     ]
@@ -27,7 +29,8 @@ Page {
             id: textFilter
             hintText: "Filter stations"
             onTextChanging: {
-                _bicing.filterCurrentStationsDataModel(text);
+                //_bicing.filterCurrentStationsDataModel(text);
+                _cityBikes.applyFilter(text)
             }
         }
         ListView {
@@ -46,7 +49,8 @@ Page {
              }
             onTriggered: {
                 var selectedItem = dataModel.data(indexPath);
-                _bicing.locationTapped(selectedItem["id"]);
+                //_bicing.locationTapped(selectedItem["id"]);
+                _cityBikes.currentLocationID=selectedItem["id"]
                 _bicing.inspectCurrentStation()
                 openPlaceInspector()
             }

@@ -112,6 +112,9 @@ void CityBikes::updateDeviceLocation(double lat, double lon) {
         m_deviceLocation->setLongitude(lon);
     }
 }
+void CityBikes::goToDeviceLocation(){
+    m_mapView->setLocation(Point(m_deviceLocation->latitude(),m_deviceLocation->longitude()));
+}
 void CityBikes::getMapImage(double lat, double lon){
     ViewProperties mapProperties;
     mapProperties.setLatitude(lat);
@@ -142,6 +145,24 @@ void CityBikes::onImageFinished(MapImageGenerator * reply){
        qDebug() << "Error loading image";
    }
    reply->deleteLater();
+}
+
+void CityBikes::inspectStation(QString id){
+
+    if(id!="device-location-id"){
+        QVariantMap map;
+        for (int i=0; i<m_jsonDataModel->size();i++){
+            QVariant v = m_jsonDataModel->value(i);
+            if (v.toMap()["id"].toString()==id) {
+                map = v.toMap();
+                break;
+            }
+        }
+        if(!map.isEmpty()){
+
+        }
+    }
+
 }
 
 
@@ -253,6 +274,7 @@ QString CityBikes::getLocalTimeFromStation(QString time,QString mode){
 
 void CityBikes::applyFilter(QString filter){
     filter = filter.trimmed();
+
     QVariantMapList l;
     for(int i=0; i<m_jsonDataModel->size();i++){
         QVariant v = m_jsonDataModel->value(i);
@@ -261,6 +283,8 @@ void CityBikes::applyFilter(QString filter){
     m_jsonDataModel->clear();
     if(filter.isEmpty()){
         m_jsonDataModel->append(l);
+    }else if(filter.contains(",",Qt::CaseInsensitive)){
+
     }else{
         foreach (QVariantMap m, l)
         {
@@ -344,28 +368,15 @@ void CityBikes::setUrl(QString url){
     emit urlChanged(url);
     getRequest(m_url);
 }
-QString CityBikes::currentLocationID(){
-    return m_currentLocationID;
-}
-void CityBikes::setCurrentLocationID(QString currentLocationID){
-    m_currentLocationID=currentLocationID;
-    emit currentLocationIDChanged(currentLocationID);
-    /*if(id!="device-location-id"){
-        for (int i=0; i<m_jsonDataModel->size();i++){
-            QVariant v = m_jsonDataModel->value(i);
-            QVariantMap m = v.toMap();
-            if (m["id"]==id) {
-                //TODO: STUFF
-            }
-        }
-    }*/
-}
 bb::cascades::Image CityBikes::staticMapImage(){
     return m_staticMapImage;
 }
 void CityBikes::setStaticMapImage(bb::cascades::Image img){
     m_staticMapImage = img;
     emit staticMapImageChanged(img);
+}
+JsonListDataModel* CityBikes::dataModel(){
+    return m_jsonDataModel;
 }
 
 

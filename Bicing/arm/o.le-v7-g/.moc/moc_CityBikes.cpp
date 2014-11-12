@@ -22,52 +22,54 @@ static const uint qt_meta_data_CityBikes[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
-       3,   59, // properties
+      10,   14, // methods
+       3,   64, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       3,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
       15,   11,   10,   10, 0x05,
-      53,   35,   10,   10, 0x05,
-      89,   87,   10,   10, 0x05,
-     138,  132,   10,   10, 0x05,
+      37,   35,   10,   10, 0x05,
+      86,   80,   10,   10, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-     162,   10,   10,   10, 0x08,
-     180,   10,   10,   10, 0x08,
-     236,   10,   10,   10, 0x08,
+     110,   10,   10,   10, 0x08,
+     128,   10,   10,   10, 0x08,
+     184,   10,   10,   10, 0x08,
 
  // methods: signature, parameters, type, tag, flags
-     270,  262,   10,   10, 0x02,
-     313,  306,   10,   10, 0x02,
+     218,  210,   10,   10, 0x02,
+     261,  254,   10,   10, 0x02,
+     282,   10,   10,   10, 0x02,
+     306,  303,   10,   10, 0x02,
 
  // properties: name, type, flags
-      11,  334, 0x0a495103,
-      35,  334, 0x0a495103,
-     362,  342, 0x0049510b,
+      11,  330, 0x0a495103,
+     358,  338, 0x0049510b,
+     392,  373, 0x00095009,
 
  // properties: notify_signal_id
        0,
        1,
-       2,
+       0,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CityBikes[] = {
-    "CityBikes\0\0url\0urlChanged(QString)\0"
-    "currentLocationID\0currentLocationIDChanged(QString)\0"
-    "i\0staticMapImageChanged(bb::cascades::Image)\0"
+    "CityBikes\0\0url\0urlChanged(QString)\0i\0"
+    "staticMapImageChanged(bb::cascades::Image)\0"
     "reply\0replyCompleted(QString)\0"
     "onReplyFinished()\0"
     "onImageFinished(bb::cascades::maps::MapImageGenerator*)\0"
     "onSystemLanguageChanged()\0lat,lon\0"
     "updateDeviceLocation(double,double)\0"
-    "filter\0applyFilter(QString)\0QString\0"
-    "bb::cascades::Image\0staticMapImage\0"
+    "filter\0applyFilter(QString)\0"
+    "goToDeviceLocation()\0id\0inspectStation(QString)\0"
+    "QString\0bb::cascades::Image\0staticMapImage\0"
+    "JsonListDataModel*\0dataModel\0"
 };
 
 void CityBikes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -77,14 +79,15 @@ void CityBikes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         CityBikes *_t = static_cast<CityBikes *>(_o);
         switch (_id) {
         case 0: _t->urlChanged((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 1: _t->currentLocationIDChanged((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 2: _t->staticMapImageChanged((*reinterpret_cast< bb::cascades::Image(*)>(_a[1]))); break;
-        case 3: _t->replyCompleted((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 4: _t->onReplyFinished(); break;
-        case 5: _t->onImageFinished((*reinterpret_cast< bb::cascades::maps::MapImageGenerator*(*)>(_a[1]))); break;
-        case 6: _t->onSystemLanguageChanged(); break;
-        case 7: _t->updateDeviceLocation((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 8: _t->applyFilter((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 1: _t->staticMapImageChanged((*reinterpret_cast< bb::cascades::Image(*)>(_a[1]))); break;
+        case 2: _t->replyCompleted((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 3: _t->onReplyFinished(); break;
+        case 4: _t->onImageFinished((*reinterpret_cast< bb::cascades::maps::MapImageGenerator*(*)>(_a[1]))); break;
+        case 5: _t->onSystemLanguageChanged(); break;
+        case 6: _t->updateDeviceLocation((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 7: _t->applyFilter((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 8: _t->goToDeviceLocation(); break;
+        case 9: _t->inspectStation((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -122,25 +125,24 @@ int CityBikes::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     }
 #ifndef QT_NO_PROPERTIES
       else if (_c == QMetaObject::ReadProperty) {
         void *_v = _a[0];
         switch (_id) {
         case 0: *reinterpret_cast< QString*>(_v) = url(); break;
-        case 1: *reinterpret_cast< QString*>(_v) = currentLocationID(); break;
-        case 2: *reinterpret_cast< bb::cascades::Image*>(_v) = staticMapImage(); break;
+        case 1: *reinterpret_cast< bb::cascades::Image*>(_v) = staticMapImage(); break;
+        case 2: *reinterpret_cast< JsonListDataModel**>(_v) = dataModel(); break;
         }
         _id -= 3;
     } else if (_c == QMetaObject::WriteProperty) {
         void *_v = _a[0];
         switch (_id) {
         case 0: setUrl(*reinterpret_cast< QString*>(_v)); break;
-        case 1: setCurrentLocationID(*reinterpret_cast< QString*>(_v)); break;
-        case 2: setStaticMapImage(*reinterpret_cast< bb::cascades::Image*>(_v)); break;
+        case 1: setStaticMapImage(*reinterpret_cast< bb::cascades::Image*>(_v)); break;
         }
         _id -= 3;
     } else if (_c == QMetaObject::ResetProperty) {
@@ -168,23 +170,16 @@ void CityBikes::urlChanged(QString _t1)
 }
 
 // SIGNAL 1
-void CityBikes::currentLocationIDChanged(QString _t1)
+void CityBikes::staticMapImageChanged(bb::cascades::Image _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void CityBikes::staticMapImageChanged(bb::cascades::Image _t1)
-{
-    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 2, _a);
-}
-
-// SIGNAL 3
 void CityBikes::replyCompleted(QString _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 3, _a);
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_END_MOC_NAMESPACE

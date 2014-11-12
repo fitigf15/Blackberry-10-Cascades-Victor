@@ -17,12 +17,12 @@
 <context>
     <name>CityBikes</name>
     <message>
-        <location filename="../src/CityBikes.cpp" line="192"/>
+        <location filename="../src/CityBikes.cpp" line="207"/>
         <source>Error: %1 status: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CityBikes.cpp" line="197"/>
+        <location filename="../src/CityBikes.cpp" line="212"/>
         <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -35,7 +35,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/JsonData.qml" line="17"/>
+        <location filename="../assets/JsonData.qml" line="18"/>
         <source>Go to me</source>
         <translation type="unfinished"></translation>
     </message>

@@ -28,6 +28,19 @@ Container {
     property bool isFavorite
     overlapTouchPolicy: OverlapTouchPolicy.Allow
     Container {
+        visible: device
+        Label {
+            text: "You"
+            visible: !status
+            textStyle.fontSize: FontSize.XXLarge
+            textStyle.color: Color.White
+            textStyle.textAlign: TextAlign.Center
+            verticalAlignment: VerticalAlignment.Center
+            horizontalAlignment: HorizontalAlignment.Center
+        }
+    }
+    Container {
+        visible: !device
         leftPadding: 10
         rightPadding: 10
         bottomPadding: 10
@@ -57,7 +70,6 @@ Container {
             horizontalAlignment: HorizontalAlignment.Center
             preferredHeight: 65
             preferredWidth: parent.preferredWidth
-            visible: !device
             Label {
                 preferredWidth: 40
                 text: "\u2605"
@@ -100,14 +112,14 @@ Container {
                 }
                 
                 Label {
-                    visible: status && !device
+                    visible: status
                     text: "\uD83D\uDEB2 : "+free_bikes.toString()
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     //preferredWidth: 110
                 }
                 Label {
-                    visible: status && !device
+                    visible: status
                     text: "\u24DF : "+empty_slots.toString() 
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center                  
@@ -115,14 +127,14 @@ Container {
                 }
                 
                 Label {
-                    visible: status && !device
+                    visible: status
                     text: "\uD83D\uDD50 : "+timestamp
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     //preferredWidth: 160
                 }
                 Label {
-                    visible: !status && !device
+                    visible: !status
                     text: "Closed \u2639"
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
@@ -130,15 +142,7 @@ Container {
                 
                 }
                 
-                Label {
-                    text: "You"
-                    visible: !status && device
-                    textStyle.fontSize: FontSize.XXLarge
-                    textStyle.color: Color.White
-                    textStyle.textAlign: TextAlign.Center
-                    verticalAlignment: VerticalAlignment.Center
-                    horizontalAlignment: HorizontalAlignment.Center
-                }
+                
                 
                 
             }

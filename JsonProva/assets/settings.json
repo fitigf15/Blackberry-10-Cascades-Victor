@@ -1,0 +1,21 @@
+{
+	"settings": {
+		"favorites": [
+		      {
+		        "id": "a8e8f371fc807d10dcf97163b01cecc8"
+		      }, 
+		      {
+		        "id": "9b87c50d47354cb6f378a6abc133bfea"
+		      }, 
+		      {
+		        "id": "350e8f64106b9aa6d3eb51880de99de1"
+		      }, 
+		      {
+		        "id": "5e1a32d86553b8b47cdebba3fb914d2c"
+		      }
+		],
+		"networkid": "bicing",
+		"location": true
+		
+	 }
+}
