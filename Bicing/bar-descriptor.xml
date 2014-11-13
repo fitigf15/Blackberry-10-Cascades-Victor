@@ -30,19 +30,23 @@
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm/o.le-v7-g/Bicing" entry="true" type="Qnx/Elf">Bicing</asset>
+
     </configuration>
     <configuration name="Device-Release">
        <entryPointType>Qnx/Cascades</entryPointType>
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm/o.le-v7/Bicing.so" entry="true" type="Qnx/Elf">Bicing.so</asset>
+
     </configuration>
     <configuration name="Device-Profile">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm-p/o.le-v7-g/Bicing" entry="true" type="Qnx/Elf">Bicing</asset>
+
     </configuration>
     <configuration name="Simulator-Debug">
        <platformArchitecture>x86</platformArchitecture>
        <asset path="x86/o-g/Bicing" entry="true" type="Qnx/Elf">Bicing</asset>
+
     </configuration>
 
     <!-- The name that is displayed in the BlackBerry 10 application installer.

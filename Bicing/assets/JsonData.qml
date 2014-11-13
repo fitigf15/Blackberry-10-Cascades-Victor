@@ -1,5 +1,6 @@
 import bb.cascades 1.2
 import bb.data 1.0
+import com.jsondatamodel 1.0
 
 Page {
     actions: [
@@ -35,7 +36,10 @@ Page {
         }
         ListView {
             id: listView
-            dataModel: _cityBikes.dataModel
+            //dataModel: _cityBikes.dataModel
+            dataModel: JsonDataModel{
+                
+            }
             listItemComponents: ListItemComponent {
                 type: "item"
                     StationListItem {
@@ -51,7 +55,7 @@ Page {
                 var selectedItem = dataModel.data(indexPath);
                 //_bicing.locationTapped(selectedItem["id"]);
                 _cityBikes.inspectStation(selectedItem["id"])
-                openPlaceInspector()
+                openPlaceInspector(selectedItem)
             }
 
         

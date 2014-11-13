@@ -22,8 +22,8 @@ static const uint qt_meta_data_CityBikes[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
-       3,   79, // properties
+      15,   14, // methods
+       3,   89, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
@@ -40,18 +40,20 @@ static const uint qt_meta_data_CityBikes[] = {
      184,   10,   10,   10, 0x08,
 
  // methods: signature, parameters, type, tag, flags
-     218,  210,   10,   10, 0x02,
-     261,  254,   10,   10, 0x02,
-     282,   10,   10,   10, 0x02,
-     306,  303,   10,   10, 0x02,
-     330,  210,   10,   10, 0x02,
-     353,   10,   10,   10, 0x02,
-     377,  303,  365,   10, 0x02,
+     235,  210,   10,   10, 0x02,
+     276,  268,   10,   10, 0x02,
+     319,  312,   10,   10, 0x02,
+     340,   10,   10,   10, 0x02,
+     364,  361,   10,   10, 0x02,
+     388,  268,   10,   10, 0x02,
+     411,   10,   10,   10, 0x02,
+     435,  361,  423,   10, 0x02,
+     485,  361,  465,   10, 0x02,
 
  // properties: name, type, flags
-      11,  407, 0x0a495103,
-     435,  415, 0x0049510b,
-     480,  450, 0x00095009,
+      11,  516, 0x0a495103,
+     544,  524, 0x0049510b,
+     589,  559, 0x00095009,
 
  // properties: notify_signal_id
        0,
@@ -67,12 +69,15 @@ static const char qt_meta_stringdata_CityBikes[] = {
     "reply\0replyCompleted(QString)\0"
     "onReplyFinished()\0"
     "onImageFinished(bb::cascades::maps::MapImageGenerator*)\0"
-    "onSystemLanguageChanged()\0lat,lon\0"
-    "updateDeviceLocation(double,double)\0"
+    "onSystemLanguageChanged()\0"
+    "selectionList,isFavorite\0"
+    "setIsFavorite(QVariantList,bool)\0"
+    "lat,lon\0updateDeviceLocation(double,double)\0"
     "filter\0applyFilter(QString)\0"
     "goToDeviceLocation()\0id\0inspectStation(QString)\0"
     "routeTo(double,double)\0resetList()\0"
     "QVariantMap\0getStationProperties(QString)\0"
+    "bb::cascades::Color\0getStationBubbleColor(QString)\0"
     "QString\0bb::cascades::Image\0staticMapImage\0"
     "bb::cascades::GroupDataModel*\0dataModel\0"
 };
@@ -89,14 +94,17 @@ void CityBikes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 3: _t->onReplyFinished(); break;
         case 4: _t->onImageFinished((*reinterpret_cast< bb::cascades::maps::MapImageGenerator*(*)>(_a[1]))); break;
         case 5: _t->onSystemLanguageChanged(); break;
-        case 6: _t->updateDeviceLocation((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 7: _t->applyFilter((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 8: _t->goToDeviceLocation(); break;
-        case 9: _t->inspectStation((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 10: _t->routeTo((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 11: _t->resetList(); break;
-        case 12: { QVariantMap _r = _t->getStationProperties((*reinterpret_cast< QString(*)>(_a[1])));
+        case 6: _t->setIsFavorite((*reinterpret_cast< const QVariantList(*)>(_a[1])),(*reinterpret_cast< const bool(*)>(_a[2]))); break;
+        case 7: _t->updateDeviceLocation((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 8: _t->applyFilter((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 9: _t->goToDeviceLocation(); break;
+        case 10: _t->inspectStation((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 11: _t->routeTo((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 12: _t->resetList(); break;
+        case 13: { QVariantMap _r = _t->getStationProperties((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QVariantMap*>(_a[0]) = _r; }  break;
+        case 14: { bb::cascades::Color _r = _t->getStationBubbleColor((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bb::cascades::Color*>(_a[0]) = _r; }  break;
         default: ;
         }
     }
@@ -134,9 +142,9 @@ int CityBikes::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 15;
     }
 #ifndef QT_NO_PROPERTIES
       else if (_c == QMetaObject::ReadProperty) {

@@ -6,6 +6,7 @@
  */
 
 #include "CityBikes.hpp"
+#include "JsonDataModel.hpp"
 #include <bb/cascades/Application>
 #include <bb/cascades/QmlDocument>
 #include <bb/cascades/AbstractPane>
@@ -13,6 +14,7 @@
 #include <bb/cascades/GroupDataModel>
 #include <bb/cascades/maps/MapView>
 #include <bb/cascades/maps/MapData>
+#include <bb/cascades/Color>
 #include <bb/cascades/maps/DataProvider>
 #include <bb/platform/geo/Point>
 #include <bb/platform/geo/GeoLocation>
@@ -39,6 +41,7 @@ CityBikes::CityBikes():
     m_jsonDataModel->setGrouping(bb::cascades::ItemGrouping::None);
 
     onSystemLanguageChanged();
+    qmlRegisterType<JsonDataModel>("com.jsondatamodel", 1, 0, "JsonDataModel");
 
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
@@ -50,7 +53,7 @@ CityBikes::CityBikes():
         m_mapView = qobject_cast<bb::cascades::maps::MapView*>(mapViewAsQObject);
         if (m_mapView) {
             // creating a data provider just for the device location object. that way, when the clear function is call, this object is not removed.
-
+            //m_mapView->setRenderEngine(TCS::RenderEngine3d);
              DataProvider* stationsLocDataProv = new DataProvider("stations-data-provider");
 
              m_mapView->mapData()->addProvider(stationsLocDataProv);
@@ -188,10 +191,33 @@ void CityBikes::inspectStation(QString id){
 QVariantMap CityBikes::getStationProperties(QString id){
     foreach(QVariantMap m, m_originalList){
         if (m["id"].toString()==id) {
+            qDebug() << m["isFavorite"];
             return m;
         }
     }
     return QVariantMap();
+}
+
+bb::cascades::Color CityBikes::getStationBubbleColor(QString id){
+    QVariantMap station;
+    foreach(QVariantMap m, m_originalList){
+        if(m["id"].toString()==id){
+            station = m;
+        }
+    }
+    if(station["extra"].toMap()["status"].toString()=="OPN"){
+        if(station["free_bikes"].toInt()>5){
+            return Color::fromARGB(0x7a00ff00);
+        }else if(station["free_bikes"].toInt()==0){
+            return Color::fromARGB(0x7aff0000);
+        }else{
+            return Color::fromARGB(0x7affff00);
+        }
+
+    }else{
+        return Color::fromARGB(0x7a000000);
+    }
+
 }
 
 void CityBikes::routeTo(double lat, double lon){
@@ -360,8 +386,10 @@ void CityBikes::updateItemIsFavoriteAtIndex(QVariantList indexPath, const bool i
     m_jsonDataModel->clear();
     int itemDataIndex = m_originalList.indexOf(modelItem);
     // Update the item in the list of data.
-    modelItem["isFavorite"]= isFavorite;
+    modelItem.insert("isFavorite",isFavorite);
+    qDebug() << "BEFORE" <<m_originalList.at(itemDataIndex)["name"] <<m_originalList.at(itemDataIndex)["isFavorite"];
     m_originalList.replace(itemDataIndex,modelItem);
+    qDebug() << "AFTER" <<m_originalList.at(itemDataIndex)["name"] <<m_originalList.at(itemDataIndex)["isFavorite"];
     QVariantMap m;
     m.insert("id",modelItem["id"].toString());
     QVariantList favorites = m_settings["favorites"].toList();

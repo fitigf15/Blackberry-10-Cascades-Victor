@@ -10,9 +10,11 @@
 #include <bb/cascades/QListDataModel>
 #include <bb/cascades/Image>
 #include <bb/cascades/GroupDataModel>
+#include <bb/cascades/Color>
 #include <bb/cascades/maps/MapImageGenerator>
 #include <bb/system/InvokeManager>
 #include <QtNetwork/QNetworkReply>
+#include "JsonDataModel.hpp"
 
 typedef bb::cascades::QListDataModel<QVariantMap> JsonListDataModel;
 typedef QList<QVariantMap> QVariantMapList;
@@ -24,6 +26,7 @@ namespace bb
         class Image;
         class LocaleHandler;
         class GroupDataModel;
+        class Color;
         namespace maps {
             class MapView;
             class MapImageGenerator;
@@ -57,7 +60,7 @@ public:
 
 
     void setJsonData(QVariant data);
-    void setIsFavorite(const QVariantList selectionList, const bool isFavorite);
+    Q_INVOKABLE void setIsFavorite(const QVariantList selectionList, const bool isFavorite);
     void deleteJsonItems(const QVariantList selectionList);
     Q_INVOKABLE void updateDeviceLocation(double lat, double lon);
     Q_INVOKABLE void applyFilter(QString filter);
@@ -66,6 +69,7 @@ public:
     Q_INVOKABLE void routeTo(double lat, double lon);
     Q_INVOKABLE void resetList();
     Q_INVOKABLE QVariantMap getStationProperties(QString id);
+    Q_INVOKABLE bb::cascades::Color getStationBubbleColor(QString id);
 
 
 Q_SIGNALS:
@@ -89,6 +93,7 @@ private:
     bb::cascades::maps::MapView *m_mapView;
     bb::platform::geo::GeoLocation *m_deviceLocation;
     bb::cascades::GroupDataModel* m_jsonDataModel;
+    JsonDataModel* mJsonDataModel;
     bb::cascades::Image m_staticMapImage;
 
 
@@ -107,6 +112,7 @@ private:
     QString m_url;
     QVariantMap m_settings;
     QVariantMapList m_originalList;
+    QVariantMapList m_tempStationList;
 
 
 

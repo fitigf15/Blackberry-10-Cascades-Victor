@@ -71,7 +71,7 @@ void JsonDataModel::parseJsonData(QVariant jsonData){
     findSettings();
     foreach(QVariant v, l){
         QVariantMap m  =v.toMap();
-        m.insert("localtime",getLocalTimeFromStation(m["timestamp"].toString()));
+        m.insert("localTimestamp",getLocalTimeFromStation(m["timestamp"].toString()));
         m.insert("isFavorite",QVariant(false));
         foreach(QVariant s, m_settings["favorites"].toList()){
             if(m["id"].toString()==s.toMap()["id"].toString()){

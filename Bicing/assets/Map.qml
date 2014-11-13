@@ -52,9 +52,10 @@ Page {
         }
         onLocationTapped: {
             //_bicing.locationTapped(id);
-            var station = _cityBikes.getStationProperties(id)
-            bubble.propertiesMap = station
-            bubble.setProperties(station["free_bikes"],station["empty_slots"],station["name"],station["localTimestamp"],station["id"],station["latitude"],station["longitude"],station.extra.status,station["isFavorite"])
+            
+            bubble.stationID = id
+            //var station = _cityBikes.getStationProperties(id)
+            //bubble.setProperties(station["free_bikes"],station["empty_slots"],station["name"],station["localTimestamp"],station["id"],station["latitude"],station["longitude"],station.extra.status,station["isFavorite"])
             //console.log(qsTr("location pressed %1").arg(id));
         }
         onLocationLongPressed: {

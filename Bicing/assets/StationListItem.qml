@@ -1,5 +1,6 @@
 import bb.cascades 1.2
 CustomListItem {
+    property variant map
  property int free_bikes
  property int empty_slots
  property string name
@@ -11,17 +12,15 @@ CustomListItem {
      ActionItem {
          title: "Favorite/Unfavorite station"
          onTriggered: {
-             if(isFavorite){
-                 isFavorite=false
-             }
-             else isFavorite=true
-             console.log(isFavorite)
+             console.log(ListItem.view.dataModel)
+             //ListItem.view.dataModel.setIsFavorite(ListItem.indexPath, !ListItemData.isFavorite);
          }
      },
      ActionItem {
          title: "log visibility"
          onTriggered: {
-             console.log(ListItemData.visible)
+             console.log(ListItemData.isFavorite)
+             console.log(map.isFavorite)
          }
      }]
  }

@@ -15,34 +15,58 @@
 import bb.cascades 1.2
 
 Container {
-    property variant propertiesMap
-    property int free_bikes
-    property int empty_slots
-    property string name
-    property string timestamp
     property string stationID
-    property string bubbleColor
-    property string latitude
-    property string longitude
-    property bool status
-    property bool isFavorite
     overlapTouchPolicy: OverlapTouchPolicy.Allow
-    function setProperties(fb,es,n,ts,sid,lat,lon,st,isf){
-        free_bikes=fb
-        empty_slots=es
-        name=n
-        timestamp=ts
-        stationID=sid
-        latitude=lat
-        longitude=lon
-        status=st=="OPN"
-        isFavorite=isf
+    onStationIDChanged: {   
+        if(stationID=="device-location-id"){
+            device.visible=true
+            nonDevice.visible=false
+        }else{
+            var propertiesMap = _cityBikes.getStationProperties(stationID)
+            device.visible=false
+            nonDevice.visible=true
+            nameLabel.text=propertiesMap.name
+            console.log("JAVASCRIPT ISFAVORITE: " +propertiesMap.isFavorite)
+            if(propertiesMap.isFavorite){
+                favLabel.text="★"
+                favLabel.preferredWidth=40
+                favLabel.visible=true
+            }else{
+                favLabel.text=""
+                favLabel.preferredWidth=0
+                favLabel.visible=false
+            }
+            freeBikesLabel.text = "\uD83D\uDEB2 : "+propertiesMap.free_bikes
+            emptySlotsLabel.text = "\u24DF : "+propertiesMap.empty_slots
+            timestampLabel.text = "\uD83D\uDD50 : "+propertiesMap.localTimestamp
+            if(propertiesMap.extra.status=="OPN"){
+                statusLabel.visible=false
+                freeBikesLabel.visible=true
+                emptySlotsLabel.visible=true
+                timestampLabel.visible=true
+                if(propertiesMap.free_bikes > 5){
+                    nameContainer.background=Color.create("#7a00ff00")
+                }else if(propertiesMap.free_bikes == 0){
+                    nameContainer.background=Color.create("#7aff0000")
+                }else{
+                    nameContainer.background=Color.create("#7affff00")
+                }
+            }else{
+                freeBikesLabel.visible=false
+                emptySlotsLabel.visible=false
+                timestampLabel.visible=false
+                statusLabel.visible=true
+                statusLabel.text="Closed \u2639"
+                nameContainer.background=Color.create("#7a000000")
+            }
+        }
+        
     }
     Container {
+        id: device
         visible: stationID=="device-location-id"
         Label {
             text: "You"
-            visible: !status
             textStyle.fontSize: FontSize.XXLarge
             textStyle.color: Color.White
             textStyle.textAlign: TextAlign.Center
@@ -51,6 +75,7 @@ Container {
         }
     }
     Container {
+        id: nonDevice
         visible: stationID!="device-location-id"
         leftPadding: 10
         rightPadding: 10
@@ -60,41 +85,26 @@ Container {
         overlapTouchPolicy: OverlapTouchPolicy.Allow
         horizontalAlignment: HorizontalAlignment.Center
         verticalAlignment: VerticalAlignment.Center 
-        background: parent.background
         Container {
             layout: StackLayout {
                 orientation: LayoutOrientation.LeftToRight
             }
             id: nameContainer
-            background: {
-                if(status){
-                    if(free_bikes > 5){
-                        return Color.create("#7a00ff00")
-                    }
-                    if(free_bikes == 0){
-                        return Color.create("#7aff0000")
-                    }
-                    return Color.create("#7affff00")
-                }
-                return Color.create("#7a000000")
-            }
             horizontalAlignment: HorizontalAlignment.Center
-            preferredHeight: 65
-            preferredWidth: parent.preferredWidth
+            preferredHeight: 75
+            preferredWidth: 720
             Label {
-                preferredWidth: 40
-                text: "\u2605"
+                id: favLabel
                 verticalAlignment: VerticalAlignment.Center
                 horizontalAlignment: HorizontalAlignment.Center
                 textStyle.color: Color.Yellow
-                visible: isFavorite
             }
             ScrollView {
                 scrollViewProperties.scrollMode: ScrollMode.Horizontal
                 scrollViewProperties.overScrollEffectMode: OverScrollEffectMode.OnScroll
                 Label {
+                    id: nameLabel
                     overlapTouchPolicy: OverlapTouchPolicy.Allow
-                    text: name
                     textStyle.color: Color.White
                     textStyle.fontSize: FontSize.Medium
                     textStyle.textAlign: TextAlign.Center
@@ -106,8 +116,8 @@ Container {
             
         }
         Container {
+            preferredWidth: 720
             preferredHeight: 72
-            preferredWidth: parent.preferredWidth
             layout: StackLayout {
                 orientation: LayoutOrientation.LeftToRight
             }
@@ -115,86 +125,65 @@ Container {
             horizontalAlignment: HorizontalAlignment.Center
             verticalAlignment: VerticalAlignment.Bottom
             Container {
+                preferredWidth: 450
                 preferredHeight: 72
                 
-                preferredWidth: parent.preferredWidth/1.2
                 layout: StackLayout {
                     orientation: LayoutOrientation.LeftToRight
                 }
                 
                 Label {
-                    visible: status
-                    text: "\uD83D\uDEB2 : "+free_bikes.toString()
+                    preferredWidth: 135
+                    id: freeBikesLabel
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     //preferredWidth: 110
                 }
                 Label {
-                    visible: status
-                    text: "\u24DF : "+empty_slots.toString() 
+                    id: emptySlotsLabel
+                    preferredWidth: 135
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center                  
                     //preferredWidth: 110
                 }
                 
                 Label {
-                    visible: status
-                    text: "\uD83D\uDD50 : "+timestamp
+                    id: timestampLabel
+                    preferredWidth: 180
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     //preferredWidth: 160
                 }
                 Label {
-                    visible: !status
-                    text: "Closed \u2639"
+                    id: statusLabel
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Center
                 
-                }
-                
-                
-                
-                
-            }
-            Container {
-                layout: StackLayout {
-                    orientation: LayoutOrientation.LeftToRight
-                }
-                ImageButton {
-                    defaultImageSource: "asset:///images/ic_nav_to.png"
-                    horizontalAlignment: HorizontalAlignment.Right
-                    onClicked:{
-                        //_bicing.routeToCurrentStation()
-                        _cityBikes.routeTo(latitude,longitude)
-                    }
-                }
-                ImageButton {
-                    defaultImageSource: "asset:///images/ic_info_black.png"
-                    horizontalAlignment: HorizontalAlignment.Right 
-                    onClicked: {
-                        //_bicing.inspectCurrentStation()
-                        
-                        _cityBikes.inspectStation(stationID)
-                        openPlaceInspector()
-                    }
-                }
-                ImageButton {
-                    defaultImageSource: "asset:///images/ic_share_black.png"
-                    horizontalAlignment: HorizontalAlignment.Right
-                    onClicked: {
-                        share(name,status,free_bikes.toString(),empty_slots.toString(),timestamp.toString())
-                        
-                    }
+                }   
+            }   
+            ImageButton {
+                preferredWidth: 90
+                defaultImageSource: "asset:///images/ic_nav_to.png"
+                horizontalAlignment: HorizontalAlignment.Right
+                onClicked:{
+                    //_bicing.routeToCurrentStation()
+                    _cityBikes.routeTo(stationID)
                 }
             }
-            
+            ImageButton {
+                preferredWidth: 90
+                defaultImageSource: "asset:///images/ic_info_black.png"
+                horizontalAlignment: HorizontalAlignment.Right 
+                onClicked: {
+                    //_bicing.inspectCurrentStation()
+                    
+                    _cityBikes.inspectStation(stationID)
+                    openPlaceInspector()
+                }
+            }          
             
         }   
              
-    }
-    
-    onBubbleColorChanged: {
-        nameContainer.background = Color.create(bubbleColor)
     }
 }
