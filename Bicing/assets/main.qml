@@ -20,8 +20,6 @@ import bb.cascades.maps 1.2
 import QtMobilitySubset.location 1.1
 
 TabbedPane {
-    paneProperties: NavigationPaneProperties {
-    }
     objectName: "tabbedPaneObj"
     id: root
     showTabsOnActionBar: true

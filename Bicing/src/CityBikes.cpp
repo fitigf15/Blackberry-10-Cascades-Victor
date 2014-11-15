@@ -283,6 +283,8 @@ void CityBikes::onReplyFinished(){
 
 void CityBikes::parseJsonData(QVariant jsonData){
     m_jsonDataModel->clear();
+    mJsonDataModel->clear();
+    QVariantMapList qvml;
     m_originalList.clear();
     QVariantList l = jsonData.toMap()["network"].toMap()["stations"].toList();
     findSettings();
@@ -297,9 +299,11 @@ void CityBikes::parseJsonData(QVariant jsonData){
             }
         }
         m_originalList.prepend(m);
+        qvml.prepend(m);
         addGeoLocation(m);
     }
     m_jsonDataModel->insertList(m_originalList);
+    mJsonDataModel->append(qvml);
 }
 
 void CityBikes::resetList(){

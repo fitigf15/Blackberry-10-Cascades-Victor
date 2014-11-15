@@ -28,9 +28,9 @@ bool JsonDataModel::saveData()
     return true;
 }
 
-void JsonDataModel::getRequest(QString url){
+void JsonDataModel::getRequest(){
     QNetworkAccessManager* m = new QNetworkAccessManager(this);
-    QNetworkReply* reply = m->get(QNetworkRequest(url));
+    QNetworkReply* reply = m->get(QNetworkRequest(m_url));
     bool ok = connect(reply,SIGNAL(finished()),this,SLOT(onReplyFinished()));
     Q_ASSERT(ok);
     Q_UNUSED(ok);
@@ -67,6 +67,7 @@ void JsonDataModel::onReplyFinished(){
 
 void JsonDataModel::parseJsonData(QVariant jsonData){
     clear();
+    m_originalList.clear();
     QVariantList l = jsonData.toMap()["network"].toMap()["stations"].toList();
     findSettings();
     foreach(QVariant v, l){
@@ -79,9 +80,8 @@ void JsonDataModel::parseJsonData(QVariant jsonData){
                 break;
             }
         }
+        m_originalList.prepend(m);
         append(m);
-
-
     }
     clear();
 }
@@ -114,21 +114,40 @@ QString JsonDataModel::getLocalTimeFromStation(QString time,QString mode){
     return t.toLocalTime().toString(mode);
 }
 
-void JsonDataModel::applyFilter(QString filter){
-    filter = filter.trimmed();
-    QVariantMapList l;
-    for(int i=0; i<size();i++){
-        QVariant v = value(i);
-        l.append(v.toMap());
-    }
+void JsonDataModel::applyFilter(){
     clear();
+    QString filter = m_filter.trimmed();
+    QVariantMapList newList;
     if(filter.isEmpty()){
-        append(l);
+        append(m_originalList);
     }else{
-        foreach (QVariantMap m, l)
-        {
-            if(m["name"].toString().contains(filter,Qt::CaseInsensitive)){
-                append(m);
+        if(filter.contains(",",Qt::CaseInsensitive)){
+            QStringList filters = filter.split(",");
+            foreach(QString f, filters){
+                bool ok;
+                if(f.toInt(&ok, 10)>0){
+                    if(ok){
+                        if(f.size()==1){
+                            f.prepend("0");
+                        }
+                    }
+                }
+            }
+            foreach(QVariantMap m, m_originalList){
+                QString s = m["name"].toString();
+                s.truncate(3);
+                foreach(QString f, filters){
+                    if(s.trimmed()==f){
+                        append(m);
+                        break;
+                    }
+                }
+            }
+        }else{
+            foreach(QVariantMap m, m_originalList){
+                if(m["name"].toString().contains(filter,Qt::CaseInsensitive)){
+                    append(m);
+                }
             }
         }
     }
@@ -138,7 +157,7 @@ void JsonDataModel::updateItemIsFavoriteAtIndex(QVariantList indexPath, const bo
 {
     QVariantMap modelItem = data(indexPath).toMap();
     // Update the item in the list of data.
-    modelItem["isFavorite"]= isFavorite;
+    modelItem.insert("isFavorite",isFavorite);
     QVariantMap m;
     m.insert("id",modelItem["id"].toString());
     QVariantList l = m_settings["favorites"].toList();
@@ -149,9 +168,7 @@ void JsonDataModel::updateItemIsFavoriteAtIndex(QVariantList indexPath, const bo
     }
     m_settings.insert("favorites",l);
 
-    foreach(QVariant v, m_settings["favorites"].toList()){
-        qDebug() << v;
-    }
+    m_originalList.replace(m_originalList.indexOf(modelItem),modelItem);
     replace(indexPath[0].toInt(),modelItem);
 
     // Since the item status was changed, it is removed from the model and
@@ -202,8 +219,23 @@ QString JsonDataModel::url(){
 }
 void JsonDataModel::setUrl(QString url){
     m_url=url;
+    getRequest();
     emit urlChanged(url);
-    getRequest(m_url);
 }
 
+QString JsonDataModel::filter(){
+    return m_filter;
+}
+void JsonDataModel::setFilter(QString filter){
+    m_filter=filter;
+    applyFilter();
+    emit filterChanged(filter);
+
+}
+
+void JsonDataModel::insertList(const QList<QVariantMap> &values){
+    m_originalList=values;
+    clear();
+    append(m_originalList);
+}
 

@@ -112,7 +112,6 @@ private:
     QString m_url;
     QVariantMap m_settings;
     QVariantMapList m_originalList;
-    QVariantMapList m_tempStationList;
 
 
 
