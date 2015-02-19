@@ -99,12 +99,12 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="32"/>
+        <location filename="../assets/main.qml" line="30"/>
         <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="39"/>
+        <location filename="../assets/main.qml" line="37"/>
         <source>Stations</source>
         <translation type="unfinished"></translation>
     </message>

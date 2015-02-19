@@ -90,7 +90,8 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/url.png) \
         $$quote($$BASEDIR/assets/images/yellow_pin.png) \
         $$quote($$BASEDIR/assets/main.qml) \
-        $$quote($$BASEDIR/assets/settings.json)
+        $$quote($$BASEDIR/assets/settings.json) \
+        $$quote($$BASEDIR/assets/xddd.qml)
 }
 
 config_pri_source_group1 {
