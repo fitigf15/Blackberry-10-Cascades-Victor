@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-import bb.cascades 1.2
-import QtMobility.sensors 1.2
-import bb.cascades.maps 1.2
-import QtMobilitySubset.location 1.1
+import bb.cascades 1.3
+import QtMobility.sensors 1.3
+import bb.cascades.maps 1.4
+import QtMobilitySubset.location 1.2
 
 TabbedPane {
     objectName: "tabbedPaneObj"
     id: root
     showTabsOnActionBar: true
-    activeTab: map
+    activeTab: stations
+    onActiveTabChanged: {
+        if(activeTab==map){
+            _cityBikes.goToDeviceLocation()
+        }
+    }
     Tab { //First tab
         id: map
         // Localized text with the dynamic translation and locale updates support
         title: qsTr("Map") + Retranslate.onLocaleOrLanguageChanged
+        imageSource: "asset:///images/url.png"
         Map {
             id: mapPage   
         }
@@ -35,6 +41,7 @@ TabbedPane {
     Tab { //Second tab
         id: stations
         title: qsTr("Stations") + Retranslate.onLocaleOrLanguageChanged
+        imageSource: "asset:///images/ic_view_list.png"
         JsonData {
             id: stationsPage            
         }
@@ -52,7 +59,8 @@ TabbedPane {
             }
         }
     }]
-    function openPlaceInspector(){
+    function openPlaceInspector(placeID){
+        placeInspector.placeID=placeID
         placeInspector.open()
     }
     function share(name,status,free_bikes,empty_slots,timestamp){

@@ -1,13 +1,12 @@
-import bb.cascades 1.2
+import bb.cascades 1.3
 import bb.data 1.0
-import com.jsondatamodel 1.0
 
 Page {
     actions: [
         //! [0]
         ActionItem {
             title: qsTr("Update")
-            imageSource: "asset:///images/pin.png"
+            imageSource: "asset:///images/ic_reload.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
                 //_bicing.updateMap()
@@ -36,17 +35,18 @@ Page {
         }
         ListView {
             id: listView
-            //dataModel: _cityBikes.dataModel
+            dataModel: _cityBikes.dataModel
+            /*
             dataModel: JsonDataModel{
                 
-            }
+            }*/
             listItemComponents: ListItemComponent {
                 type: "item"
                     StationListItem {
                         name: ListItemData.name
                         free_bikes: ListItemData.free_bikes
                         empty_slots: ListItemData.empty_slots
-                        timestamp: ListItemData.timestamp
+                        timestamp: ListItemData.localTimestamp
                         status: ListItemData.extra.status.toString()=="OPN"
                     
                     } 
@@ -54,8 +54,7 @@ Page {
             onTriggered: {
                 var selectedItem = dataModel.data(indexPath);
                 //_bicing.locationTapped(selectedItem["id"]);
-                _cityBikes.inspectStation(selectedItem["id"])
-                openPlaceInspector(selectedItem)
+                openPlaceInspector(selectedItem["id"])
             }
 
         

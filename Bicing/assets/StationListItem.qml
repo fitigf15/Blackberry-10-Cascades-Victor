@@ -1,4 +1,4 @@
-import bb.cascades 1.2
+import bb.cascades 1.3
 CustomListItem {
     property variant map
  property int free_bikes
@@ -7,6 +7,7 @@ CustomListItem {
  property string timestamp
  property bool status
  property bool isFavorite
+ /*
  contextActions: ActionSet {
      actions: [
      ActionItem {
@@ -23,7 +24,7 @@ CustomListItem {
              console.log(map.isFavorite)
          }
      }]
- }
+ }*/
  highlightAppearance: HighlightAppearance.Full
  dividerVisible: true
  content:Container {

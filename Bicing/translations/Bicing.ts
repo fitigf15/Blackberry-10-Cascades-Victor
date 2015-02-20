@@ -17,12 +17,12 @@
 <context>
     <name>CityBikes</name>
     <message>
-        <location filename="../src/CityBikes.cpp" line="272"/>
+        <location filename="../src/CityBikes.cpp" line="277"/>
         <source>Error: %1 status: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CityBikes.cpp" line="277"/>
+        <location filename="../src/CityBikes.cpp" line="282"/>
         <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -30,12 +30,12 @@
 <context>
     <name>JsonData</name>
     <message>
-        <location filename="../assets/JsonData.qml" line="9"/>
+        <location filename="../assets/JsonData.qml" line="8"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/JsonData.qml" line="19"/>
+        <location filename="../assets/JsonData.qml" line="18"/>
         <source>Go to me</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,12 +99,12 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="30"/>
+        <location filename="../assets/main.qml" line="35"/>
         <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="37"/>
+        <location filename="../assets/main.qml" line="43"/>
         <source>Stations</source>
         <translation type="unfinished"></translation>
     </message>

@@ -12,18 +12,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import bb.cascades 1.2
+import bb.cascades 1.3
 
 Container {
     property string stationID
     overlapTouchPolicy: OverlapTouchPolicy.Allow
     onStationIDChanged: {   
         if(stationID=="device-location-id"){
-            device.visible=true
-            nonDevice.visible=false
+            nameLabel.text="Your location"
+            nameContainer.background=Color.create("#7a000000")
+            statusLabel.visible=false
+            freeBikesLabel.visible=false
+            emptySlotsLabel.visible=false
+            timestampLabel.visible=false
+            inspectImageButton.visible=false
+            gotoImageButton.visible=false
+            favLabel.visible=false
         }else{
+            inspectImageButton.visible=true
+            gotoImageButton.visible=true
             var propertiesMap = _cityBikes.getStationProperties(stationID)
-            device.visible=false
             nonDevice.visible=true
             nameLabel.text=propertiesMap.name
             console.log("JAVASCRIPT ISFAVORITE: " +propertiesMap.isFavorite)
@@ -36,10 +44,10 @@ Container {
                 favLabel.preferredWidth=0
                 favLabel.visible=false
             }
-            freeBikesLabel.text = "\uD83D\uDEB2 : "+propertiesMap.free_bikes
-            emptySlotsLabel.text = "\u24DF : "+propertiesMap.empty_slots
-            timestampLabel.text = "\uD83D\uDD50 : "+propertiesMap.localTimestamp
             if(propertiesMap.extra.status=="OPN"){
+                freeBikesLabel.text = "\uD83D\uDEB2 : "+propertiesMap.free_bikes
+                emptySlotsLabel.text = "\u24DF : "+propertiesMap.empty_slots
+                timestampLabel.text = "\uD83D\uDD50 : "+propertiesMap.localTimestamp
                 statusLabel.visible=false
                 freeBikesLabel.visible=true
                 emptySlotsLabel.visible=true
@@ -59,24 +67,12 @@ Container {
                 statusLabel.text="Closed \u2639"
                 nameContainer.background=Color.create("#7a000000")
             }
-        }
+     }
+         
         
     }
     Container {
-        id: device
-        visible: stationID=="device-location-id"
-        Label {
-            text: "You"
-            textStyle.fontSize: FontSize.XXLarge
-            textStyle.color: Color.White
-            textStyle.textAlign: TextAlign.Center
-            verticalAlignment: VerticalAlignment.Center
-            horizontalAlignment: HorizontalAlignment.Center
-        }
-    }
-    Container {
         id: nonDevice
-        visible: stationID!="device-location-id"
         leftPadding: 10
         rightPadding: 10
         bottomPadding: 10
@@ -163,6 +159,7 @@ Container {
                 }   
             }   
             ImageButton {
+                id: gotoImageButton
                 preferredWidth: 90
                 defaultImageSource: "asset:///images/ic_nav_to.png"
                 horizontalAlignment: HorizontalAlignment.Right
@@ -172,14 +169,14 @@ Container {
                 }
             }
             ImageButton {
+                id: inspectImageButton
                 preferredWidth: 90
                 defaultImageSource: "asset:///images/ic_info_black.png"
                 horizontalAlignment: HorizontalAlignment.Right 
                 onClicked: {
                     //_bicing.inspectCurrentStation()
                     
-                    _cityBikes.inspectStation(stationID)
-                    openPlaceInspector()
+                    openPlaceInspector(stationID)
                 }
             }          
             

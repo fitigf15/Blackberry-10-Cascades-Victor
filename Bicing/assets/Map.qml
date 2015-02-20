@@ -1,14 +1,14 @@
-import bb.cascades 1.2
-import QtMobility.sensors 1.2
-import bb.cascades.maps 1.2
-import QtMobilitySubset.location 1.1
+import bb.cascades 1.3
+import QtMobility.sensors 1.3
+import bb.cascades.maps 1.4
+import QtMobilitySubset.location 1.2
 
 Page {
     actions: [
         //! [0]
         ActionItem {
             title: qsTr("Update")
-            imageSource: "asset:///images/pin.png"
+            imageSource: "asset:///images/ic_reload.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
                 //_bicing.updateMap()
@@ -28,7 +28,7 @@ Page {
     ]
     MapView {
         id: mapview
-        altitude: 4000
+        altitude: 2000
         objectName: "mapViewObj"
         latitude: 41.3850639
         longitude: 2.1734035
@@ -52,8 +52,8 @@ Page {
         }
         onLocationTapped: {
             //_bicing.locationTapped(id);
-            
             bubble.stationID = id
+            
             //var station = _cityBikes.getStationProperties(id)
             //bubble.setProperties(station["free_bikes"],station["empty_slots"],station["name"],station["localTimestamp"],station["id"],station["latitude"],station["longitude"],station.extra.status,station["isFavorite"])
             //console.log(qsTr("location pressed %1").arg(id));
@@ -72,7 +72,8 @@ Page {
         PositionSource {
             id: positionSource
             active: true
-            updateInterval: 5000
+            updateInterval: 30000
+
             onPositionChanged: {
                 //_bicing.updateDeviceLocation(positionSource.position.coordinate.latitude, positionSource.position.coordinate.longitude)
                 _cityBikes.updateDeviceLocation(positionSource.position.coordinate.latitude, positionSource.position.coordinate.longitude)
@@ -82,6 +83,7 @@ Page {
             id: nearbyStationsDialog
             objectName: "nearbyStationsDialogObj"
             DialogContent {
+                preferredWidth: 720
             }
             
     }]

@@ -1,4 +1,4 @@
-import bb.cascades 1.2
+import bb.cascades 1.3
 WebView {
     property string latitude
     property string longitude

@@ -1,21 +1,28 @@
-import bb.cascades 1.2
+import bb.cascades 1.3
 Sheet {
     id: rootPage
-    property int free_bikes
-    property int empty_slots
-    property string lat
-    property string lon
-    property string name
-    property string timestamp
-    property bool isFavorite
-    property bool device
-    property bool status
+    property string placeID
     objectName: "placeInspectorObj"
     peekEnabled: false
+    onClosed: {
+        _cityBikes.selectOriginalList()
+    }
+    onPlaceIDChanged: {
+        console.log("PLACE ID CHANGED")
+        var placeMap = _cityBikes.getStationProperties(placeID)
+        _cityBikes.inspectStation(placeMap["id"])
+        freeBikesLabel.text="\uD83D\uDEB2: " + placeMap["free_bikes"]
+        emptySlotsLabel.text="\u24DF: "  + placeMap["empty_slots"]
+        streetView.latitude=placeMap["latitude"]
+        streetView.longitude=placeMap["longitude"]
+        titleBar.title=placeMap["name"]
+        timestampLabel.text="\uD83D\uDD50: "+ placeMap["localTimestamp"]
+        
+    }
     Page {
         
         titleBar: TitleBar {
-            title: name
+            id: titleBar
             dismissAction: ActionItem {
                 title: "close"
                 onTriggered: {
@@ -48,14 +55,13 @@ Sheet {
                 StreetView {
                     id: streetView
                     visible: false
-                    latitude: lat
-                    longitude: lon
                 }
                 Container {
                     id: information
                     ImageView {
-                        image: _cityBikes.staticMapImage
+                        id: staticMapImageView
                         scalingMethod: ScalingMethod.Fill
+                        image: _cityBikes.staticMapImage
                     }
                     Divider {
                     
@@ -66,16 +72,15 @@ Sheet {
                         }
                         Label {
                             id: freeBikesLabel
-                            text: "\uD83D\uDEB2: " + free_bikes.toString()
                         
                         }
                         Label {
                             id: emptySlotsLabel
-                            text: "\u24DF: "  + empty_slots.toString()
+                            
                         }
                         Label {
                             id: timestampLabel
-                            text: if(timestamp)"\uD83D\uDD50: "+ timestamp
+                            
                         }
                     }
                     Divider {
@@ -129,7 +134,7 @@ Sheet {
                                 name: ListItemData.name
                                 free_bikes: ListItemData.free_bikes
                                 empty_slots: ListItemData.empty_slots
-                                timestamp: ListItemData.timestamp
+                                timestamp: ListItemData.localTimestamp
                                 status: ListItemData.extra.status.toString()=="OPN"
                             
                             } 
@@ -139,12 +144,13 @@ Sheet {
                             //_bicing.locationTapped(selectedItem["id"]);
                             //_bicing.inspectCurrentStation()
                             _cityBikes.inspectStation(selectedItem["id"])
-                            free_bikes=selectedItem["free_bikes"]
-                            empty_slots=selectedItem["empty_slots"]
-                            lat=selectedItem["latitude"]
-                            lon=selectedItem["longitude"]
-                            name=selectedItem["name"]
-                            timestamp=selectedItem["timestamp"]
+                            freeBikesLabel.text="\uD83D\uDEB2: " + selectedItem["free_bikes"]
+                            emptySlotsLabel.text="\u24DF: "  + selectedItem["empty_slots"]
+                            streetView.latitude=selectedItem["latitude"]
+                            streetView.longitude=selectedItem["longitude"]
+                            titleBar.title=selectedItem["name"]
+                            timestampLabel.text="\uD83D\uDD50: "+ selectedItem["localTimestamp"]
+                            staticMapImageView.image=_cityBikes.staticMapImage
                         }
                     
                     }

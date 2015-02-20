@@ -41,7 +41,7 @@ CityBikes::CityBikes():
     m_jsonDataModel->setGrouping(bb::cascades::ItemGrouping::None);
 
     onSystemLanguageChanged();
-    qmlRegisterType<JsonDataModel>("com.jsondatamodel", 1, 0, "JsonDataModel");
+    //qmlRegisterType<JsonDataModel>("com.jsondatamodel", 1, 0, "JsonDataModel");
 
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
@@ -66,6 +66,7 @@ CityBikes::CityBikes():
                                  QPoint(29, 29), QPoint(29, 1));
              m_deviceLocation->setMarker(bullseye);
              deviceLocDataProv->add(m_deviceLocation);
+
 
              setUrl("http://api.citybik.es/v2/networks/bicing");
 
@@ -156,7 +157,8 @@ void CityBikes::onImageFinished(MapImageGenerator * reply){
 
 void CityBikes::inspectStation(QString id){
     m_jsonDataModel->clear();
-    QVariantMapList newList;
+    m_stationID= id;
+    m_currentStationOriginalList.clear();
     if(id!="device-location-id"){
         QVariantMap stationMap;
         foreach(QVariantMap m, m_originalList){
@@ -170,22 +172,25 @@ void CityBikes::inspectStation(QString id){
         if(!stationMap.isEmpty()){
             getMapImage(stationMap["latitude"].toDouble(),stationMap["longitude"].toDouble());
             QVariantList nearbyStationList=stationMap["extra"].toMap()["NearbyStationList"].toList();
-            QVariantList stationsList;
             foreach(QVariantMap m, m_originalList){
                 foreach(QVariant uid, nearbyStationList){
                     QString s = m["name"].toString();
                     s.truncate(3);
                     if(s.trimmed().toInt()==uid.toInt()){
-                        newList.prepend(m);
+                        m_currentStationOriginalList.prepend(m);
                         break;
                     }
                 }
             }
-
-            m_jsonDataModel->insertList(newList);
+            m_jsonDataModel->insertList(m_currentStationOriginalList);
         }
     }
 
+}
+
+void CityBikes::selectOriginalList(){
+    m_jsonDataModel->clear();
+    m_jsonDataModel->insertList(m_originalList);
 }
 
 QVariantMap CityBikes::getStationProperties(QString id){
@@ -282,8 +287,8 @@ void CityBikes::onReplyFinished(){
 }
 
 void CityBikes::parseJsonData(QVariant jsonData){
+
     m_jsonDataModel->clear();
-    mJsonDataModel->clear();
     QVariantMapList qvml;
     m_originalList.clear();
     QVariantList l = jsonData.toMap()["network"].toMap()["stations"].toList();
@@ -299,11 +304,10 @@ void CityBikes::parseJsonData(QVariant jsonData){
             }
         }
         m_originalList.prepend(m);
-        qvml.prepend(m);
         addGeoLocation(m);
     }
     m_jsonDataModel->insertList(m_originalList);
-    mJsonDataModel->append(qvml);
+
 }
 
 void CityBikes::resetList(){
@@ -344,41 +348,52 @@ void CityBikes::applyFilter(QString filter){
     filter = filter.trimmed();
     QVariantMapList newList;
     qDebug() << "FILTER" << filter;
-    if(filter.isEmpty()){
-        newList = m_originalList;
-    }else{
-        if(filter.contains(",",Qt::CaseInsensitive)){
-            QStringList filters = filter.split(",");
-            foreach(QString f, filters){
-                bool ok;
-                if(f.toInt(&ok, 10)>0){
-                    if(ok){
-                        if(f.size()==1){
-                            f.prepend("0");
+    if(m_stationID==""){
+        if(filter.isEmpty()){
+            newList = m_originalList;
+        }else{
+            /*if(filter.contains(",",Qt::CaseInsensitive)){
+                QStringList filters = filter.split(",");
+                foreach(QString f, filters){
+                    bool ok;
+                    if(f.toInt(&ok, 10)>0){
+                        if(ok){
+                            if(f.size()==1){
+                                f.prepend("0");
+                            }
                         }
                     }
                 }
-            }
-            foreach(QVariantMap m, m_originalList){
-                QString s = m["name"].toString();
-                s.truncate(3);
-                foreach(QString f, filters){
-                    if(s.trimmed()==f){
-                        newList.prepend(m);
-                        break;
+                foreach(QVariantMap m, m_originalList){
+                    QString s = m["name"].toString();
+                    s.truncate(3);
+                    foreach(QString f, filters){
+                        if(s.trimmed()==f){
+                            newList.prepend(m);
+                            break;
+                        }
                     }
                 }
-            }
-        }else{
+            }else{*/
             foreach(QVariantMap m, m_originalList){
                 if(m["name"].toString().contains(filter,Qt::CaseInsensitive)){
                     newList.prepend(m);
                 }
             }
         }
-
-
+    }else{
+        if(filter.isEmpty()){
+            newList = m_currentStationOriginalList;
+        }else{
+            foreach(QVariantMap m, m_currentStationOriginalList){
+                if(m["name"].toString().contains(filter,Qt::CaseInsensitive)){
+                    newList.prepend(m);
+                }
+            }
+        }
     }
+
+
 
     m_jsonDataModel->insertList(newList);
 
@@ -472,5 +487,10 @@ void CityBikes::setStaticMapImage(bb::cascades::Image img){
 bb::cascades::GroupDataModel* CityBikes::dataModel(){
     return m_jsonDataModel;
 }
-
+void CityBikes::setStationID(QString stationID){
+    m_stationID=stationID;
+}
+QString CityBikes::stationID(){
+    return m_stationID;
+}
 

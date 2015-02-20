@@ -44,15 +44,19 @@ class CityBikes: public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
+    Q_PROPERTY(QString stationID READ stationID WRITE setStationID NOTIFY stationIDChanged)
     Q_PROPERTY(bb::cascades::Image staticMapImage READ staticMapImage WRITE setStaticMapImage NOTIFY staticMapImageChanged)
     Q_PROPERTY(bb::cascades::GroupDataModel* dataModel READ dataModel)
+
 public:
 
     CityBikes();
     virtual ~CityBikes();
 
     QString url();
+    QString stationID();
     void setUrl(QString url);
+    void setStationID(QString stationID);
     bb::cascades::Image staticMapImage();
     void setStaticMapImage(bb::cascades::Image i);
     bb::cascades::GroupDataModel* dataModel();
@@ -66,6 +70,7 @@ public:
     Q_INVOKABLE void applyFilter(QString filter);
     Q_INVOKABLE void goToDeviceLocation();
     Q_INVOKABLE void inspectStation(QString id);
+    Q_INVOKABLE void selectOriginalList();
     Q_INVOKABLE void routeTo(double lat, double lon);
     Q_INVOKABLE void resetList();
     Q_INVOKABLE QVariantMap getStationProperties(QString id);
@@ -74,6 +79,7 @@ public:
 
 Q_SIGNALS:
     void urlChanged(QString url);
+    void stationIDChanged(QString stationID);
     void staticMapImageChanged(bb::cascades::Image i);
     void replyCompleted(QString reply);
 
@@ -93,7 +99,6 @@ private:
     bb::cascades::maps::MapView *m_mapView;
     bb::platform::geo::GeoLocation *m_deviceLocation;
     bb::cascades::GroupDataModel* m_jsonDataModel;
-    JsonDataModel* mJsonDataModel;
     bb::cascades::Image m_staticMapImage;
 
 
@@ -109,9 +114,11 @@ private:
     bool jsonToDataFolder();
     bool saveData();
 
+    QString m_stationID;
     QString m_url;
     QVariantMap m_settings;
     QVariantMapList m_originalList;
+    QVariantMapList m_currentStationOriginalList;
 
 
 

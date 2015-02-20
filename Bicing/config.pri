@@ -65,10 +65,10 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/JsonData.qml) \
         $$quote($$BASEDIR/assets/ListPage.qml) \
         $$quote($$BASEDIR/assets/Map.qml) \
-        $$quote($$BASEDIR/assets/MapPage.qml) \
         $$quote($$BASEDIR/assets/PlaceInspector.qml) \
         $$quote($$BASEDIR/assets/StationListItem.qml) \
         $$quote($$BASEDIR/assets/StreetView.qml) \
+        $$quote($$BASEDIR/assets/images/Thumbs.db) \
         $$quote($$BASEDIR/assets/images/black_pin.png) \
         $$quote($$BASEDIR/assets/images/bubble.png) \
         $$quote($$BASEDIR/assets/images/bubble2.png) \
@@ -81,8 +81,10 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/ic_info_black.png) \
         $$quote($$BASEDIR/assets/images/ic_map.png) \
         $$quote($$BASEDIR/assets/images/ic_nav_to.png) \
+        $$quote($$BASEDIR/assets/images/ic_reload.png) \
         $$quote($$BASEDIR/assets/images/ic_share.png) \
         $$quote($$BASEDIR/assets/images/ic_share_black.png) \
+        $$quote($$BASEDIR/assets/images/ic_view_list.png) \
         $$quote($$BASEDIR/assets/images/me.png) \
         $$quote($$BASEDIR/assets/images/nearby.png) \
         $$quote($$BASEDIR/assets/images/pin.png) \
@@ -90,8 +92,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/url.png) \
         $$quote($$BASEDIR/assets/images/yellow_pin.png) \
         $$quote($$BASEDIR/assets/main.qml) \
-        $$quote($$BASEDIR/assets/settings.json) \
-        $$quote($$BASEDIR/assets/xddd.qml)
+        $$quote($$BASEDIR/assets/settings.json)
 }
 
 config_pri_source_group1 {
