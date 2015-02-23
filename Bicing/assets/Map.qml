@@ -12,7 +12,8 @@ Page {
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
                 //_bicing.updateMap()
-                _cityBikes.url="http://api.citybik.es/v2/networks/bicing"
+                _cityBikes.refreshStations()
+                _cityBikes.refreshBoundingBox()
             }
         }
         ,
@@ -23,19 +24,30 @@ Page {
             onTriggered: {
                 //_bicing.goToMyLocation()
                 _cityBikes.goToDeviceLocation()
+                _cityBikes.refreshBoundingBox()
             }
         }
     ]
     MapView {
         id: mapview
-        altitude: 2000
+        altitude: 1000
         objectName: "mapViewObj"
-        latitude: 41.3850639
-        longitude: 2.1734035
+        //latitude: 41.3850639
+        //longitude: 2.1734035
         onMapLongPressed: {
             console.log(qsTr("map long pressed"));
         }
-        
+        onFocusedChanged: {
+            
+            if(!focused){
+                _cityBikes.refreshBoundingBox()
+                console.log("focused changed")
+            }
+            
+        }
+        onMapDataChanged: {
+            
+        }
         onFollowedIdChanged: {
             console.log(qsTr("followed id changed to %1").arg(idOfFollowed));
         }
@@ -66,6 +78,7 @@ Page {
             objectName: "bubbleObj"
             id: bubble
         }
+        
     
     }
     attachedObjects:  [

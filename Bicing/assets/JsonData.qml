@@ -2,6 +2,31 @@ import bb.cascades 1.3
 import bb.data 1.0
 
 Page {
+    titleBar: TitleBar {
+        id: segmentedTitle
+        kind: TitleBarKind.Segmented
+        scrollBehavior: TitleBarScrollBehavior.Sticky
+        
+        // The segmented control decides which filter should be set on the
+        // dataModel used by the photo bucket list.
+        options: [
+            Option {
+                text: qsTr("all") + Retranslate.onLanguageChanged
+                value: ("all")
+            },
+            Option {
+                text: qsTr("favorites") + Retranslate.onLanguageChanged
+                value: ("favorites")
+            }
+        ]
+        
+        onSelectedValueChanged: {
+            // When a new Option is selected the dataModel of the ListView, the jsonDataModels
+            // filter is set and the list is repopulated.
+            jsonList.favSelected=selectedValue.toString()=="favorites"
+            console.log(selectedValue.toString())
+        }
+    }
     actions: [
         //! [0]
         ActionItem {
@@ -10,7 +35,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
                 //_bicing.updateMap()
-                _cityBikes.url="http://api.citybik.es/v2/networks/bicing"
+                _cityBikes.refreshStations()
             }
         }
         ,
@@ -25,6 +50,7 @@ Page {
         }
     ]
     Container {
+        
         TextField {
             id: textFilter
             hintText: "Filter stations"

@@ -19,6 +19,8 @@
 #include <bb/platform/geo/Point>
 #include <bb/platform/geo/GeoLocation>
 #include <bb/platform/geo/Marker>
+#include <bb/platform/geo/GeoList>
+#include <bb/platform/geo/BoundingBox>
 #include <bb/data/JsonDataAccess>
 using namespace bb;
 using namespace bb::cascades;
@@ -55,8 +57,10 @@ CityBikes::CityBikes():
             // creating a data provider just for the device location object. that way, when the clear function is call, this object is not removed.
             //m_mapView->setRenderEngine(TCS::RenderEngine3d);
              DataProvider* stationsLocDataProv = new DataProvider("stations-data-provider");
-
+             stationsLocDataProv->setVisible(false);
              m_mapView->mapData()->addProvider(stationsLocDataProv);
+             DataProvider* currentLocDataProv = new DataProvider("current-location-data-provider");
+             m_mapView->mapData()->addProvider(currentLocDataProv);
              // create a geolocation just for the device's location
              DataProvider* deviceLocDataProv = new DataProvider("device-location-data-provider");
              m_mapView->mapData()->addProvider(deviceLocDataProv);
@@ -91,27 +95,34 @@ CityBikes::~CityBikes()
 }
 
 void CityBikes::addGeoLocation(QVariantMap map){
-    GeoLocation* newDrop = new GeoLocation(map["id"].toString(),map["name"].toString(), Point(map["latitude"].toDouble(),map["longitude"].toDouble()));
-    QString desc = QString("Free: "+map["free_bikes"].toString()+" - Empty: "+map["empty_slots"].toString());
-    newDrop->setDescription(desc);
+    GeoLocation* newDrop = new GeoLocation(map["id"].toString());
+    newDrop->setPoint(Point(map["latitude"].toDouble(),map["longitude"].toDouble()));
+    QString desc;
+
     Marker flag;
     if(map["extra"].toMap()["status"].toString()=="OPN"){
         if(map["free_bikes"].toInt()>5){
             flag.setIconUri("asset:///images/green_pin.png");
+            desc = QString("green");
         }else if(map["free_bikes"].toInt()==0){
             flag.setIconUri("asset:///images/red_pin.png");
+            desc = QString("red");
         }else{
             flag.setIconUri("asset:///images/yellow_pin.png");
+            desc = QString("yellow");
         }
 
     }else{
         flag.setIconUri("asset:///images/black_pin.png");
+        desc = QString("black");
     }
+    newDrop->setDescription(desc);
     flag.setIconSize(QSize(60, 60));
     flag.setLocationCoordinate(QPoint(20, 59));
     flag.setCaptionTailCoordinate(QPoint(20, 1));
     newDrop->setMarker(flag);
     m_mapView->mapData()->provider("stations-data-provider")->add(newDrop);
+
 }
 
 void CityBikes::updateDeviceLocation(double lat, double lon) {
@@ -122,6 +133,7 @@ void CityBikes::updateDeviceLocation(double lat, double lon) {
 }
 void CityBikes::goToDeviceLocation(){
     m_mapView->setLocation(Point(m_deviceLocation->latitude(),m_deviceLocation->longitude()));
+    refreshBoundingBox();
 }
 void CityBikes::getMapImage(double lat, double lon){
     ViewProperties mapProperties;
@@ -157,7 +169,7 @@ void CityBikes::onImageFinished(MapImageGenerator * reply){
 
 void CityBikes::inspectStation(QString id){
     m_jsonDataModel->clear();
-    m_stationID= id;
+    m_generalFIlter= id;
     m_currentStationOriginalList.clear();
     if(id!="device-location-id"){
         QVariantMap stationMap;
@@ -189,6 +201,7 @@ void CityBikes::inspectStation(QString id){
 }
 
 void CityBikes::selectOriginalList(){
+    m_generalFIlter="";
     m_jsonDataModel->clear();
     m_jsonDataModel->insertList(m_originalList);
 }
@@ -293,6 +306,7 @@ void CityBikes::parseJsonData(QVariant jsonData){
     m_originalList.clear();
     QVariantList l = jsonData.toMap()["network"].toMap()["stations"].toList();
     findSettings();
+
     foreach(QVariant v, l){
         QVariantMap m  =v.toMap();
         m.insert("localTimestamp",getLocalTimeFromStation(m["timestamp"].toString()));
@@ -304,7 +318,7 @@ void CityBikes::parseJsonData(QVariant jsonData){
             }
         }
         m_originalList.prepend(m);
-        addGeoLocation(m);
+        //addGeoLocation(m);
     }
     m_jsonDataModel->insertList(m_originalList);
 
@@ -348,7 +362,7 @@ void CityBikes::applyFilter(QString filter){
     filter = filter.trimmed();
     QVariantMapList newList;
     qDebug() << "FILTER" << filter;
-    if(m_stationID==""){
+    if(m_generalFIlter==""){
         if(filter.isEmpty()){
             newList = m_originalList;
         }else{
@@ -475,7 +489,22 @@ QString CityBikes::url(){
 void CityBikes::setUrl(QString url){
     m_url=url;
     emit urlChanged(url);
+    refreshStations();
+}
+void CityBikes::refreshStations(){
     getRequest(m_url);
+}
+void CityBikes::refreshBoundingBox(){
+    m_mapView->mapData()->provider("current-location-data-provider")->clear();
+    foreach(QVariantMap m, m_originalList){
+        addGeoLocation(m);
+    }
+    foreach(Geographic* g,m_mapView->mapData()->provider("stations-data-provider")->find(m_mapView->boundingBox()).toQList()){
+        //m_mapView->mapData()->provider("stations-data-provider")->find(m_mapView->boundingBox()).remove(g->geoId());
+        m_mapView->mapData()->provider("current-location-data-provider")->add(g);
+        //qDebug() << g->geoId();
+    }
+
 }
 bb::cascades::Image CityBikes::staticMapImage(){
     return m_staticMapImage;
@@ -487,10 +516,10 @@ void CityBikes::setStaticMapImage(bb::cascades::Image img){
 bb::cascades::GroupDataModel* CityBikes::dataModel(){
     return m_jsonDataModel;
 }
-void CityBikes::setStationID(QString stationID){
-    m_stationID=stationID;
+void CityBikes::setGeneralFilter(QString generalFilter){
+    m_generalFIlter=generalFilter;
 }
-QString CityBikes::stationID(){
-    return m_stationID;
+QString CityBikes::generalFilter(){
+    return m_generalFIlter;
 }
 

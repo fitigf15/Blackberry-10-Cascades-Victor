@@ -17,12 +17,12 @@
 <context>
     <name>CityBikes</name>
     <message>
-        <location filename="../src/CityBikes.cpp" line="277"/>
+        <location filename="../src/CityBikes.cpp" line="290"/>
         <source>Error: %1 status: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CityBikes.cpp" line="282"/>
+        <location filename="../src/CityBikes.cpp" line="295"/>
         <source>Unable to retrieve request headers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -30,12 +30,22 @@
 <context>
     <name>JsonData</name>
     <message>
-        <location filename="../assets/JsonData.qml" line="8"/>
-        <source>Update</source>
+        <location filename="../assets/JsonData.qml" line="14"/>
+        <source>all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../assets/JsonData.qml" line="18"/>
+        <source>favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/JsonData.qml" line="33"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/JsonData.qml" line="43"/>
         <source>Go to me</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,37 +71,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="20"/>
+        <location filename="../assets/Map.qml" line="21"/>
         <source>Go to me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="36"/>
+        <location filename="../assets/Map.qml" line="38"/>
         <source>map long pressed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="40"/>
+        <location filename="../assets/Map.qml" line="52"/>
         <source>followed id changed to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="43"/>
+        <location filename="../assets/Map.qml" line="55"/>
         <source>focused id changed to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="47"/>
+        <location filename="../assets/Map.qml" line="59"/>
         <source>button clicked %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="51"/>
+        <location filename="../assets/Map.qml" line="63"/>
         <source>label clicked %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Map.qml" line="63"/>
+        <location filename="../assets/Map.qml" line="75"/>
         <source>location long pressed %1</source>
         <translation type="unfinished"></translation>
     </message>

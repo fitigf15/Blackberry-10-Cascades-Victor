@@ -44,7 +44,7 @@ class CityBikes: public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
-    Q_PROPERTY(QString stationID READ stationID WRITE setStationID NOTIFY stationIDChanged)
+    Q_PROPERTY(QString generalFilter READ generalFilter WRITE setGeneralFilter NOTIFY generalFilterChanged)
     Q_PROPERTY(bb::cascades::Image staticMapImage READ staticMapImage WRITE setStaticMapImage NOTIFY staticMapImageChanged)
     Q_PROPERTY(bb::cascades::GroupDataModel* dataModel READ dataModel)
 
@@ -54,9 +54,9 @@ public:
     virtual ~CityBikes();
 
     QString url();
-    QString stationID();
+    QString generalFilter();
     void setUrl(QString url);
-    void setStationID(QString stationID);
+    void setGeneralFilter(QString generalFilter);
     bb::cascades::Image staticMapImage();
     void setStaticMapImage(bb::cascades::Image i);
     bb::cascades::GroupDataModel* dataModel();
@@ -73,13 +73,16 @@ public:
     Q_INVOKABLE void selectOriginalList();
     Q_INVOKABLE void routeTo(double lat, double lon);
     Q_INVOKABLE void resetList();
+    Q_INVOKABLE void refreshStations();
+    Q_INVOKABLE void refreshBoundingBox();
     Q_INVOKABLE QVariantMap getStationProperties(QString id);
     Q_INVOKABLE bb::cascades::Color getStationBubbleColor(QString id);
 
 
+
 Q_SIGNALS:
     void urlChanged(QString url);
-    void stationIDChanged(QString stationID);
+    void generalFilterChanged(QString generalFilter);
     void staticMapImageChanged(bb::cascades::Image i);
     void replyCompleted(QString reply);
 
@@ -114,7 +117,7 @@ private:
     bool jsonToDataFolder();
     bool saveData();
 
-    QString m_stationID;
+    QString m_generalFIlter;
     QString m_url;
     QVariantMap m_settings;
     QVariantMapList m_originalList;

@@ -1,5 +1,5 @@
 1
-33
+34
 Bubble.qml
 DialogContent.qml
 images/black_pin.png
@@ -14,6 +14,7 @@ images/ic_info.png
 images/ic_info_black.png
 images/ic_map.png
 images/ic_nav_to.png
+images/ic_nav_to_black.png
 images/ic_reload.png
 images/ic_share.png
 images/ic_share_black.png

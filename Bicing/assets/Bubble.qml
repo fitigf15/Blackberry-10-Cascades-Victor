@@ -62,7 +62,7 @@ Container {
             }else{
                 freeBikesLabel.visible=false
                 emptySlotsLabel.visible=false
-                timestampLabel.visible=false
+                timestampLabel.visible=true
                 statusLabel.visible=true
                 statusLabel.text="Closed \u2639"
                 nameContainer.background=Color.create("#7a000000")
@@ -77,27 +77,28 @@ Container {
         rightPadding: 10
         bottomPadding: 10
         topPadding: 10
-        preferredWidth: 720
+        //preferredWidth: 720
         overlapTouchPolicy: OverlapTouchPolicy.Allow
         horizontalAlignment: HorizontalAlignment.Center
         verticalAlignment: VerticalAlignment.Center 
+        layout: StackLayout {
+            orientation: LayoutOrientation.LeftToRight
+        }
         Container {
-            layout: StackLayout {
-                orientation: LayoutOrientation.LeftToRight
-            }
-            id: nameContainer
-            horizontalAlignment: HorizontalAlignment.Center
-            preferredHeight: 75
-            preferredWidth: 720
-            Label {
-                id: favLabel
-                verticalAlignment: VerticalAlignment.Center
+            Container {
+                layout: StackLayout {
+                    orientation: LayoutOrientation.LeftToRight
+                }
+                id: nameContainer
                 horizontalAlignment: HorizontalAlignment.Center
-                textStyle.color: Color.Yellow
-            }
-            ScrollView {
-                scrollViewProperties.scrollMode: ScrollMode.Horizontal
-                scrollViewProperties.overScrollEffectMode: OverScrollEffectMode.OnScroll
+                //preferredHeight: 75
+                preferredWidth: 450
+                Label {
+                    id: favLabel
+                    verticalAlignment: VerticalAlignment.Center
+                    horizontalAlignment: HorizontalAlignment.Center
+                    textStyle.color: Color.Yellow
+                }
                 Label {
                     id: nameLabel
                     overlapTouchPolicy: OverlapTouchPolicy.Allow
@@ -106,30 +107,20 @@ Container {
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Center
-                }
+                }    
             }
-            
-            
-        }
-        Container {
-            preferredWidth: 720
-            preferredHeight: 72
-            layout: StackLayout {
-                orientation: LayoutOrientation.LeftToRight
-            }
-            background: Color.create("#7a00ffff")
-            horizontalAlignment: HorizontalAlignment.Center
-            verticalAlignment: VerticalAlignment.Bottom
             Container {
                 preferredWidth: 450
-                preferredHeight: 72
-                
+                //preferredHeight: 72
+                background: Color.create("#7a00ffff")
+                horizontalAlignment: HorizontalAlignment.Center
+                verticalAlignment: VerticalAlignment.Bottom
                 layout: StackLayout {
                     orientation: LayoutOrientation.LeftToRight
                 }
                 
                 Label {
-                    preferredWidth: 135
+                    //preferredWidth: 135
                     id: freeBikesLabel
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
@@ -137,7 +128,7 @@ Container {
                 }
                 Label {
                     id: emptySlotsLabel
-                    preferredWidth: 135
+                    //preferredWidth: 135
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center                  
                     //preferredWidth: 110
@@ -145,7 +136,7 @@ Container {
                 
                 Label {
                     id: timestampLabel
-                    preferredWidth: 180
+                    //preferredWidth: 180
                     textStyle.textAlign: TextAlign.Center
                     verticalAlignment: VerticalAlignment.Center
                     //preferredWidth: 160
@@ -158,6 +149,18 @@ Container {
                 
                 }   
             }   
+        }
+        
+        Container {
+            //preferredWidth: 720
+            //preferredHeight: 72
+            layout: StackLayout {
+                orientation: LayoutOrientation.LeftToRight
+            }
+            background: Color.create("#7a00ffff")
+            horizontalAlignment: HorizontalAlignment.Center
+            verticalAlignment: VerticalAlignment.Bottom
+            
             ImageButton {
                 id: gotoImageButton
                 preferredWidth: 90

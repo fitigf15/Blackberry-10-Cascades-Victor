@@ -81,6 +81,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/ic_info_black.png) \
         $$quote($$BASEDIR/assets/images/ic_map.png) \
         $$quote($$BASEDIR/assets/images/ic_nav_to.png) \
+        $$quote($$BASEDIR/assets/images/ic_nav_to_black.png) \
         $$quote($$BASEDIR/assets/images/ic_reload.png) \
         $$quote($$BASEDIR/assets/images/ic_share.png) \
         $$quote($$BASEDIR/assets/images/ic_share_black.png) \
